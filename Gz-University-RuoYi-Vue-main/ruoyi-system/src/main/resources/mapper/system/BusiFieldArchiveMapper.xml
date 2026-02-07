@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiFieldArchiveMapper">
+
+    <resultMap type="BusiFieldArchive" id="BusiFieldArchiveResult">
+        <result property="archiveId"    column="archive_id"    />
+        <result property="startId"    column="start_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="location"    column="location"    />
+        <result property="archiverName"    column="archiver_name"    />
+        <result property="leaderName"    column="leader_name"    />
+        <result property="workPhotoUrl"    column="work_photo_url"    />
+        <result property="speciesPhotoUrl"    column="species_photo_url"    />
+        <result property="habitatPhotoUrl"    column="habitat_photo_url"    />
+        <result property="ovitalDataUrl"    column="ovital_data_url"    />
+        <result property="cameraDataUrl"    column="camera_data_url"    />
+        <result property="infoSheetUrl"    column="info_sheet_url"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBusiFieldArchiveVo">
+        select archive_id, start_id, project_name, location, archiver_name, leader_name, work_photo_url, species_photo_url, habitat_photo_url, ovital_data_url, camera_data_url, info_sheet_url, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from busi_field_archive
+    </sql>
+
+    <select id="selectBusiFieldArchiveList" parameterType="BusiFieldArchive" resultMap="BusiFieldArchiveResult">
+        <include refid="selectBusiFieldArchiveVo"/>
+        <where>
+            <if test="projectName != null  and projectName != ''">
+                and project_name like concat('%', #{projectName}, '%')
+            </if>
+
+            <if test="location != null  and location != ''">
+                and location like concat('%', #{location}, '%')
+            </if>
+
+            <if test="leaderName != null  and leaderName != ''">
+                and leader_name like concat('%', #{leaderName}, '%')
+            </if>
+
+            <if test="archiverName != null  and archiverName != ''">
+                and archiver_name like concat('%', #{archiverName}, '%')
+            </if>
+
+            <if test="auditStatus != null  and auditStatus != ''">
+                and audit_status = #{auditStatus}
+            </if>
+
+            <if test="params.dataScope != null and params.dataScope != ''">
+                ${params.dataScope}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBusiFieldArchiveByArchiveId" parameterType="Long" resultMap="BusiFieldArchiveResult">
+        <include refid="selectBusiFieldArchiveVo"/>
+        where archive_id = #{archiveId}
+    </select>
+
+    <insert id="insertBusiFieldArchive" parameterType="BusiFieldArchive" useGeneratedKeys="true" keyProperty="archiveId">
+        insert into busi_field_archive
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="startId != null">start_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="location != null">location,</if>
+            <if test="archiverName != null">archiver_name,</if>
+            <if test="leaderName != null">leader_name,</if>
+            <if test="workPhotoUrl != null">work_photo_url,</if>
+            <if test="speciesPhotoUrl != null">species_photo_url,</if>
+            <if test="habitatPhotoUrl != null">habitat_photo_url,</if>
+            <if test="ovitalDataUrl != null">ovital_data_url,</if>
+            <if test="cameraDataUrl != null">camera_data_url,</if>
+            <if test="infoSheetUrl != null">info_sheet_url,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="startId != null">#{startId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="location != null">#{location},</if>
+            <if test="archiverName != null">#{archiverName},</if>
+            <if test="leaderName != null">#{leaderName},</if>
+            <if test="workPhotoUrl != null">#{workPhotoUrl},</if>
+            <if test="speciesPhotoUrl != null">#{speciesPhotoUrl},</if>
+            <if test="habitatPhotoUrl != null">#{habitatPhotoUrl},</if>
+            <if test="ovitalDataUrl != null">#{ovitalDataUrl},</if>
+            <if test="cameraDataUrl != null">#{cameraDataUrl},</if>
+            <if test="infoSheetUrl != null">#{infoSheetUrl},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBusiFieldArchive" parameterType="BusiFieldArchive">
+        update busi_field_archive
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startId != null">start_id = #{startId},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="archiverName != null">archiver_name = #{archiverName},</if>
+            <if test="leaderName != null">leader_name = #{leaderName},</if>
+            <if test="workPhotoUrl != null">work_photo_url = #{workPhotoUrl},</if>
+            <if test="speciesPhotoUrl != null">species_photo_url = #{speciesPhotoUrl},</if>
+            <if test="habitatPhotoUrl != null">habitat_photo_url = #{habitatPhotoUrl},</if>
+            <if test="ovitalDataUrl != null">ovital_data_url = #{ovitalDataUrl},</if>
+            <if test="cameraDataUrl != null">camera_data_url = #{cameraDataUrl},</if>
+            <if test="infoSheetUrl != null">info_sheet_url = #{infoSheetUrl},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where archive_id = #{archiveId}
+    </update>
+
+    <delete id="deleteBusiFieldArchiveByArchiveId" parameterType="Long">
+        delete from busi_field_archive where archive_id = #{archiveId}
+    </delete>
+
+    <delete id="deleteBusiFieldArchiveByArchiveIds" parameterType="String">
+        delete from busi_field_archive where archive_id in
+        <foreach item="archiveId" collection="array" open="(" separator="," close=")">
+            #{archiveId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SamplingInformationMapper">
+
+    <resultMap type="SamplingInformation" id="SamplingInformationResult">
+        <result property="id"    column="id"    />
+        <result property="sequenceNo"    column="sequence_no"    />
+        <result property="sampleName"    column="sample_name"    />
+        <result property="host"    column="host"    />
+        <result property="sampleType"    column="sample_type"    />
+        <result property="samplingTime"    column="sampling_time"    />
+        <result property="location"    column="location"    />
+        <result property="habitatType"    column="habitat_type"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="samplingPerson"    column="sampling_person"    />
+        <result property="storageLocation"    column="storage_location"    />
+    </resultMap>
+
+    <resultMap id="SamplingInformationSampleUsageRecordResult" type="SamplingInformation" extends="SamplingInformationResult">
+        <collection property="sampleUsageRecordList" ofType="SampleUsageRecord" column="id" select="selectSampleUsageRecordList" />
+    </resultMap>
+
+    <resultMap type="SampleUsageRecord" id="SampleUsageRecordResult">
+        <result property="id"    column="id"    />
+        <result property="sampleId"    column="sample_id"    />
+        <result property="sampleCode"    column="sample_code"    />
+        <result property="host"    column="host"    />
+        <result property="sampleType"    column="sample_type"    />
+        <result property="samplingLocation"    column="sampling_location"    />
+        <result property="habitatType"    column="habitat_type"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="samplingTime"    column="sampling_time"    />
+        <result property="sampler"    column="sampler"    />
+        <result property="storageLocation"    column="storage_location"    />
+        <result property="usedBy"    column="used_by"    />
+        <result property="usedTime"    column="used_time"    />
+        <result property="purpose"    column="purpose"    />
+    </resultMap>
+
+    <sql id="selectSamplingInformationVo">
+        select id, sequence_no, sample_name, host, sample_type, sampling_time, location, habitat_type, longitude, latitude, sampling_person, storage_location from sampling_information
+    </sql>
+
+    <select id="selectSamplingInformationList" parameterType="SamplingInformation" resultMap="SamplingInformationResult">
+        <include refid="selectSamplingInformationVo"/>
+        <where>
+            <if test="host != null  and host != ''"> and host = #{host}</if>
+            <if test="sampleName != null  and sampleName != ''"> and sample_name like concat('%', #{sampleName}, '%')</if>
+            <if test="sampleType != null  and sampleType != ''"> and sample_type = #{sampleType}</if>
+            <if test="samplingPerson != null  and samplingPerson != ''"> and sampling_person like concat('%', #{samplingPerson}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectSamplingInformationById" parameterType="Long" resultMap="SamplingInformationSampleUsageRecordResult">
+        select id, sequence_no, sample_name, host, sample_type, sampling_time, location, habitat_type, longitude, latitude, sampling_person, storage_location
+        from sampling_information
+        where id = #{id}
+    </select>
+
+    <select id="selectSampleUsageRecordList" resultMap="SampleUsageRecordResult">
+        select id, sample_id, sample_code, host, sample_type, sampling_location, habitat_type, longitude, latitude, sampling_time, sampler, storage_location, used_by, used_time, purpose
+        from sample_usage_record
+        where sample_id = #{sample_id}
+    </select>
+
+    <insert id="insertSamplingInformation" parameterType="SamplingInformation" useGeneratedKeys="true" keyProperty="id">
+        insert into sampling_information
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no,</if>
+            <if test="sampleName != null">sample_name,</if>
+            <if test="host != null">host,</if>
+            <if test="sampleType != null">sample_type,</if>
+            <if test="samplingTime != null">sampling_time,</if>
+            <if test="location != null">location,</if>
+            <if test="habitatType != null">habitat_type,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="samplingPerson != null">sampling_person,</if>
+            <if test="storageLocation != null">storage_location,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">#{sequenceNo},</if>
+            <if test="sampleName != null">#{sampleName},</if>
+            <if test="host != null">#{host},</if>
+            <if test="sampleType != null">#{sampleType},</if>
+            <if test="samplingTime != null">#{samplingTime},</if>
+            <if test="location != null">#{location},</if>
+            <if test="habitatType != null">#{habitatType},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="samplingPerson != null">#{samplingPerson},</if>
+            <if test="storageLocation != null">#{storageLocation},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSamplingInformation" parameterType="SamplingInformation">
+        UPDATE sampling_information
+        <set>
+            <if test="sequenceNo != null">sequence_no = #{sequenceNo},</if>
+            <if test="sampleName != null">sample_name = #{sampleName},</if>
+            <if test="host != null">host = #{host},</if>
+            <if test="sampleType != null">sample_type = #{sampleType},</if>
+            <if test="samplingTime != null">sampling_time = #{samplingTime},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="habitatType != null">habitat_type = #{habitatType},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="samplingPerson != null">sampling_person = #{samplingPerson},</if>
+            <if test="storageLocation != null">storage_location = #{storageLocation},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteSamplingInformationById" parameterType="Long">
+        delete from sampling_information where id = #{id}
+    </delete>
+
+    <delete id="deleteSamplingInformationByIds" parameterType="String">
+        delete from sampling_information where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSampleUsageRecordBySampleIds" parameterType="String">
+        delete from sample_usage_record where sample_id in
+        <foreach item="sampleId" collection="array" open="(" separator="," close=")">
+            #{sampleId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSampleUsageRecordBySampleId" parameterType="Long">
+        delete from sample_usage_record where sample_id = #{sampleId}
+    </delete>
+
+    <insert id="batchSampleUsageRecord">
+        insert into sample_usage_record( sample_id, sample_code, host, sample_type, sampling_location, habitat_type, longitude, latitude, sampling_time, sampler, storage_location, used_by, used_time, purpose) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.sampleId}, #{item.sampleCode}, #{item.host}, #{item.sampleType}, #{item.samplingLocation}, #{item.habitatType}, #{item.longitude}, #{item.latitude}, #{item.samplingTime}, #{item.sampler}, #{item.storageLocation}, #{item.usedBy}, #{item.usedTime}, #{item.purpose})
+        </foreach>
+    </insert>
+</mapper>

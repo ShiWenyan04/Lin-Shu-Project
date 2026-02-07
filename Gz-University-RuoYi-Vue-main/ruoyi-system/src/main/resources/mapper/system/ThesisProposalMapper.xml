@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ThesisProposalMapper">
+
+    <resultMap type="ThesisProposal" id="ThesisProposalResult">
+        <result property="id"    column="id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="degreeType"    column="degree_type"    />
+        <result property="major"    column="major"    />
+        <result property="enrollmentYear"    column="enrollment_year"    />
+        <result property="thesisTitle"    column="thesis_title"    />
+        <result property="researchDirection"    column="research_direction"    />
+        <result property="plannedProposalDate"    column="planned_proposal_date"    />
+        <result property="actualProposalDate"    column="actual_proposal_date"    />
+        <result property="midtermCheckDate"    column="midterm_check_date"    />
+        <result property="midtermDefenseDate"    column="midterm_defense_date"    />
+        <result property="proposalReportUrl"    column="proposal_report_url"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectThesisProposalVo">
+        select id, student_name, degree_type, major, enrollment_year, thesis_title, research_direction, planned_proposal_date, actual_proposal_date, midterm_check_date, midterm_defense_date, proposal_report_url, create_by, create_time, update_by, update_time, status from thesis_proposal
+    </sql>
+
+    <select id="selectThesisProposalList" parameterType="ThesisProposal" resultMap="ThesisProposalResult">
+        <include refid="selectThesisProposalVo"/>
+        <where>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+    </select>
+
+    <select id="selectThesisProposalById" parameterType="Long" resultMap="ThesisProposalResult">
+        <include refid="selectThesisProposalVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertThesisProposal" parameterType="ThesisProposal" useGeneratedKeys="true" keyProperty="id">
+        insert into thesis_proposal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="degreeType != null and degreeType != ''">degree_type,</if>
+            <if test="major != null and major != ''">major,</if>
+            <if test="enrollmentYear != null and enrollmentYear != ''">enrollment_year,</if>
+            <if test="thesisTitle != null and thesisTitle != ''">thesis_title,</if>
+            <if test="researchDirection != null">research_direction,</if>
+            <if test="plannedProposalDate != null">planned_proposal_date,</if>
+            <if test="actualProposalDate != null">actual_proposal_date,</if>
+            <if test="midtermCheckDate != null">midterm_check_date,</if>
+            <if test="midtermDefenseDate != null">midterm_defense_date,</if>
+            <if test="proposalReportUrl != null">proposal_report_url,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="degreeType != null and degreeType != ''">#{degreeType},</if>
+            <if test="major != null and major != ''">#{major},</if>
+            <if test="enrollmentYear != null and enrollmentYear != ''">#{enrollmentYear},</if>
+            <if test="thesisTitle != null and thesisTitle != ''">#{thesisTitle},</if>
+            <if test="researchDirection != null">#{researchDirection},</if>
+            <if test="plannedProposalDate != null">#{plannedProposalDate},</if>
+            <if test="actualProposalDate != null">#{actualProposalDate},</if>
+            <if test="midtermCheckDate != null">#{midtermCheckDate},</if>
+            <if test="midtermDefenseDate != null">#{midtermDefenseDate},</if>
+            <if test="proposalReportUrl != null">#{proposalReportUrl},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateThesisProposal" parameterType="ThesisProposal">
+        update thesis_proposal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="degreeType != null and degreeType != ''">degree_type = #{degreeType},</if>
+            <if test="major != null and major != ''">major = #{major},</if>
+            <if test="enrollmentYear != null and enrollmentYear != ''">enrollment_year = #{enrollmentYear},</if>
+            <if test="thesisTitle != null and thesisTitle != ''">thesis_title = #{thesisTitle},</if>
+            <if test="researchDirection != null">research_direction = #{researchDirection},</if>
+            <if test="plannedProposalDate != null">planned_proposal_date = #{plannedProposalDate},</if>
+            <if test="actualProposalDate != null">actual_proposal_date = #{actualProposalDate},</if>
+            <if test="midtermCheckDate != null">midterm_check_date = #{midtermCheckDate},</if>
+            <if test="midtermDefenseDate != null">midterm_defense_date = #{midtermDefenseDate},</if>
+            <if test="proposalReportUrl != null">proposal_report_url = #{proposalReportUrl},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteThesisProposalById" parameterType="Long">
+        delete from thesis_proposal where id = #{id}
+    </delete>
+
+    <delete id="deleteThesisProposalByIds" parameterType="String">
+        delete from thesis_proposal where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CameraDeploymentMapper">
+
+    <resultMap type="CameraDeployment" id="CameraDeploymentResult">
+        <result property="id" column="id"/>
+        <result property="sequenceNo" column="sequence_no"/>
+        <result property="batchName" column="batch_name"/>
+        <result property="area" column="area"/>
+        <result property="deploymentStart" column="deployment_start"/>
+        <result property="deploymentEnd" column="deployment_end"/>
+        <result property="quantity" column="quantity"/>
+        <result property="leader" column="leader"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="remarks" column="remarks"/>
+        <result property="filePath" column="file_path"/>
+        <result property="fileSize" column="file_size"/>
+    </resultMap>
+
+    <sql id="selectCameraDeploymentVo">
+        select id, sequence_no, batch_name, area, deployment_start, deployment_end, quantity, leader, created_by, created_time, remarks, file_path, file_size from camera_deployment
+    </sql>
+
+    <select id="selectCameraDeploymentList" parameterType="CameraDeployment" resultMap="CameraDeploymentResult">
+        <include refid="selectCameraDeploymentVo"/>
+        <where>
+            <if test="batchName != null and batchName != ''"> and batch_name like concat('%', #{batchName}, '%')</if>
+            <if test="area != null and area != ''"> and area like concat('%', #{area}, '%')</if>
+            <!-- 添加日期范围查询条件 -->
+            <if test="params != null and params.deploymentStartBegin != null and params.deploymentStartBegin != ''">
+                AND deployment_start &gt;= #{params.deploymentStartBegin}
+            </if>
+            <if test="params != null and params.deploymentStartEnd != null and params.deploymentStartEnd != ''">
+                AND deployment_start &lt;= #{params.deploymentStartEnd}
+            </if>
+        </where>
+        order by deployment_start desc
+    </select>
+
+    <select id="selectCameraDeploymentById" parameterType="Long" resultMap="CameraDeploymentResult">
+        <include refid="selectCameraDeploymentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCameraDeployment" parameterType="CameraDeployment" useGeneratedKeys="true" keyProperty="id">
+        insert into camera_deployment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no,</if>
+            <if test="batchName != null and batchName != ''">batch_name,</if>
+            <if test="area != null and area != ''">area,</if>
+            <if test="deploymentStart != null">deployment_start,</if>
+            <if test="deploymentEnd != null">deployment_end,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="leader != null and leader != ''">leader,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="fileSize != null">file_size,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">#{sequenceNo},</if>
+            <if test="batchName != null and batchName != ''">#{batchName},</if>
+            <if test="area != null and area != ''">#{area},</if>
+            <if test="deploymentStart != null">#{deploymentStart},</if>
+            <if test="deploymentEnd != null">#{deploymentEnd},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="leader != null and leader != ''">#{leader},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCameraDeployment" parameterType="CameraDeployment">
+        update camera_deployment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no = #{sequenceNo},</if>
+            <if test="batchName != null and batchName != ''">batch_name = #{batchName},</if>
+            <if test="area != null and area != ''">area = #{area},</if>
+            <if test="deploymentStart != null">deployment_start = #{deploymentStart},</if>
+            <if test="deploymentEnd != null">deployment_end = #{deploymentEnd},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="leader != null and leader != ''">leader = #{leader},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCameraDeploymentById" parameterType="Long">
+        delete from camera_deployment where id = #{id}
+    </delete>
+
+    <delete id="deleteCameraDeploymentByIds" parameterType="String">
+        delete from camera_deployment where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

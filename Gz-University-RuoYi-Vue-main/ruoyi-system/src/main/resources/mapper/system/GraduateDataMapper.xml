@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GraduateDataMapper">
+    
+    <resultMap type="GraduateData" id="GraduateDataResult">
+        <result property="id"    column="id"    />
+        <result property="sequenceNo"    column="sequence_no"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="student"    column="student"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="fileSize"    column="file_size"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="filePath"    column="file_path"    />
+    </resultMap>
+
+    <sql id="selectGraduateDataVo">
+        select id, sequence_no, file_name, student, file_type, file_size, created_by, remarks, created_time, updated_time, file_path from graduate_data
+    </sql>
+
+    <select id="selectGraduateDataList" parameterType="GraduateData" resultMap="GraduateDataResult">
+        <include refid="selectGraduateDataVo"/>
+        <where>  
+            <if test="sequenceNo != null "> and sequence_no = #{sequenceNo}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="student != null  and student != ''"> and student = #{student}</if>
+            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+        </where>
+    </select>
+    
+    <select id="selectGraduateDataById" parameterType="Long" resultMap="GraduateDataResult">
+        <include refid="selectGraduateDataVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGraduateData" parameterType="GraduateData" useGeneratedKeys="true" keyProperty="id">
+        insert into graduate_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <!-- 移除非空检查，允许插入空值 -->
+            <if test="sequenceNo != null">sequence_no,</if>
+            <if test="fileName != null and fileName != ''">file_name,</if>
+            <if test="student != null and student != ''">student,</if>
+            <if test="fileType != null">file_type,</if>
+            <if test="fileSize != null">file_size,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedTime != null">updated_time,</if>
+            <if test="filePath != null">file_path,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">#{sequenceNo},</if>
+            <if test="fileName != null and fileName != ''">#{fileName},</if>
+            <if test="student != null and student != ''">#{student},</if>
+            <if test="fileType != null">#{fileType},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+            <if test="filePath != null">#{filePath},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGraduateData" parameterType="GraduateData">
+        update graduate_data
+        <trim prefix="SET" suffixOverrides=",">
+            <!-- 移除非空检查，允许更新为空值 -->
+            <if test="sequenceNo != null">sequence_no = #{sequenceNo},</if>
+            <if test="fileName != null and fileName != ''">file_name = #{fileName},</if>
+            <if test="student != null and student != ''">student = #{student},</if>
+            <if test="fileType != null">file_type = #{fileType},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGraduateDataById" parameterType="Long">
+        delete from graduate_data where id = #{id}
+    </delete>
+
+    <delete id="deleteGraduateDataByIds" parameterType="String">
+        delete from graduate_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

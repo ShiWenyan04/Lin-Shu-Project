@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiFieldStartMapper">
+
+    <resultMap type="BusiFieldStart" id="BusiFieldStartResult">
+        <result property="startId"    column="start_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="leaderName"    column="leader_name"    />
+        <result property="reason"    column="reason"    />
+        <result property="destination"    column="destination"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="planDays"    column="plan_days"    />
+        <result property="membersInner"    column="members_inner"    />
+        <result property="membersOuter"    column="members_outer"    />
+        <result property="isInsurance"    column="is_insurance"    />
+        <result property="carCompany"    column="car_company"    />
+        <result property="planFile"    column="plan_file"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+
+        <result property="endCount" column="end_count" />
+    </resultMap>
+
+    <sql id="selectBusiFieldStartVo">
+        select start_id, project_id, leader_name, reason, destination, start_date, plan_days, members_inner, members_outer, is_insurance, car_company, plan_file, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from busi_field_start
+    </sql>
+
+    <select id="selectBusiFieldStartList" parameterType="BusiFieldStart" resultMap="BusiFieldStartResult">
+        select
+        start_id, project_id, leader_name, reason, destination, start_date, plan_days,
+        members_inner, members_outer, is_insurance, car_company, plan_file,
+        audit_status, audit_reason, create_by, create_time, update_by, update_time, remark,
+
+        (select count(1) from busi_field_end e where e.start_id = busi_field_start.start_id) as end_count
+
+        from busi_field_start
+        <where>
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="leaderName != null  and leaderName != ''"> and leader_name like concat('%', #{leaderName}, '%')</if>
+            <if test="destination != null  and destination != ''"> and destination like concat('%', #{destination}, '%')</if>
+            <if test="auditStatus != null  and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+
+            <if test="params.dataScope != null and params.dataScope != ''">
+                ${params.dataScope}
+            </if>
+
+            <if test="projectName != null and projectName != ''">
+                AND project_id IN (
+                SELECT project_id
+                FROM busi_project
+                WHERE project_name LIKE concat('%', #{projectName}, '%')
+                )
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBusiFieldStartByStartId" parameterType="Long" resultMap="BusiFieldStartResult">
+        <include refid="selectBusiFieldStartVo"/>
+        where start_id = #{startId}
+    </select>
+
+    <insert id="insertBusiFieldStart" parameterType="BusiFieldStart" useGeneratedKeys="true" keyProperty="startId">
+        insert into busi_field_start
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="leaderName != null">leader_name,</if>
+            <if test="reason != null">reason,</if>
+            <if test="destination != null">destination,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="planDays != null">plan_days,</if>
+            <if test="membersInner != null">members_inner,</if>
+            <if test="membersOuter != null">members_outer,</if>
+            <if test="isInsurance != null">is_insurance,</if>
+            <if test="carCompany != null">car_company,</if>
+            <if test="planFile != null">plan_file,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="leaderName != null">#{leaderName},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="destination != null">#{destination},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="planDays != null">#{planDays},</if>
+            <if test="membersInner != null">#{membersInner},</if>
+            <if test="membersOuter != null">#{membersOuter},</if>
+            <if test="isInsurance != null">#{isInsurance},</if>
+            <if test="carCompany != null">#{carCompany},</if>
+            <if test="planFile != null">#{planFile},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBusiFieldStart" parameterType="BusiFieldStart">
+        update busi_field_start
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="leaderName != null">leader_name = #{leaderName},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="destination != null">destination = #{destination},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="planDays != null">plan_days = #{planDays},</if>
+            <if test="membersInner != null">members_inner = #{membersInner},</if>
+            <if test="membersOuter != null">members_outer = #{membersOuter},</if>
+            <if test="isInsurance != null">is_insurance = #{isInsurance},</if>
+            <if test="carCompany != null">car_company = #{carCompany},</if>
+            <if test="planFile != null">plan_file = #{planFile},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where start_id = #{startId}
+    </update>
+
+    <delete id="deleteBusiFieldStartByStartId" parameterType="Long">
+        delete from busi_field_start where start_id = #{startId}
+    </delete>
+
+    <delete id="deleteBusiFieldStartByStartIds" parameterType="String">
+        delete from busi_field_start where start_id in
+        <foreach item="startId" collection="array" open="(" separator="," close=")">
+            #{startId}
+        </foreach>
+    </delete>
+</mapper>

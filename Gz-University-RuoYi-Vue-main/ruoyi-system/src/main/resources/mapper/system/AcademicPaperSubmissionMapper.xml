@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AcademicPaperSubmissionMapper">
+    
+    <resultMap type="AcademicPaperSubmission" id="AcademicPaperSubmissionResult">
+        <result property="id"    column="id"    />
+        <result property="paperId"    column="paper_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="degreeType"    column="degree_type"    />
+        <result property="supervisorName"    column="supervisor_name"    />
+        <result property="paperTitle"    column="paper_title"    />
+        <result property="submissionDate"    column="submission_date"    />
+        <result property="journalName"    column="journal_name"    />
+        <result property="receiveDate"    column="receive_date"    />
+        <result property="rejectionDate"    column="rejection_date"    />
+        <result property="resubmissionDate"    column="resubmission_date"    />
+        <result property="publicationDate"    column="publication_date"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="submissionStatus"    column="submission_status"    />
+    </resultMap>
+
+    <sql id="selectAcademicPaperSubmissionVo">
+        select id, paper_id, student_name, degree_type, supervisor_name, paper_title, submission_date, journal_name, receive_date, rejection_date, resubmission_date, publication_date, create_by, create_time, update_by, update_time, submission_status from academic_paper_submission
+    </sql>
+
+    <select id="selectAcademicPaperSubmissionList" parameterType="AcademicPaperSubmission" resultMap="AcademicPaperSubmissionResult">
+        <include refid="selectAcademicPaperSubmissionVo"/>
+        <where>
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+
+        </where>
+    </select>
+    
+    <select id="selectAcademicPaperSubmissionById" parameterType="Long" resultMap="AcademicPaperSubmissionResult">
+        <include refid="selectAcademicPaperSubmissionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAcademicPaperSubmission" parameterType="AcademicPaperSubmission" useGeneratedKeys="true" keyProperty="id">
+        insert into academic_paper_submission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="paperId != null">paper_id,</if>
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="degreeType != null and degreeType != ''">degree_type,</if>
+            <if test="supervisorName != null and supervisorName != ''">supervisor_name,</if>
+            <if test="paperTitle != null and paperTitle != ''">paper_title,</if>
+            <if test="submissionDate != null">submission_date,</if>
+            <if test="journalName != null and journalName != ''">journal_name,</if>
+            <if test="receiveDate != null">receive_date,</if>
+            <if test="rejectionDate != null">rejection_date,</if>
+            <if test="resubmissionDate != null">resubmission_date,</if>
+            <if test="publicationDate != null">publication_date,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="submissionStatus != null">submission_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="paperId != null">#{paperId},</if>
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="degreeType != null and degreeType != ''">#{degreeType},</if>
+            <if test="supervisorName != null and supervisorName != ''">#{supervisorName},</if>
+            <if test="paperTitle != null and paperTitle != ''">#{paperTitle},</if>
+            <if test="submissionDate != null">#{submissionDate},</if>
+            <if test="journalName != null and journalName != ''">#{journalName},</if>
+            <if test="receiveDate != null">#{receiveDate},</if>
+            <if test="rejectionDate != null">#{rejectionDate},</if>
+            <if test="resubmissionDate != null">#{resubmissionDate},</if>
+            <if test="publicationDate != null">#{publicationDate},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="submissionStatus != null">#{submissionStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcademicPaperSubmission" parameterType="AcademicPaperSubmission">
+        update academic_paper_submission
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="paperId != null">paper_id = #{paperId},</if>
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="degreeType != null and degreeType != ''">degree_type = #{degreeType},</if>
+            <if test="supervisorName != null and supervisorName != ''">supervisor_name = #{supervisorName},</if>
+            <if test="paperTitle != null and paperTitle != ''">paper_title = #{paperTitle},</if>
+            <if test="submissionDate != null">submission_date = #{submissionDate},</if>
+            <if test="journalName != null and journalName != ''">journal_name = #{journalName},</if>
+            <if test="receiveDate != null">receive_date = #{receiveDate},</if>
+            <if test="rejectionDate != null">rejection_date = #{rejectionDate},</if>
+            <if test="resubmissionDate != null">resubmission_date = #{resubmissionDate},</if>
+            <if test="publicationDate != null">publication_date = #{publicationDate},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="submissionStatus != null">submission_status = #{submissionStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcademicPaperSubmissionById" parameterType="Long">
+        delete from academic_paper_submission where id = #{id}
+    </delete>
+
+    <delete id="deleteAcademicPaperSubmissionByIds" parameterType="String">
+        delete from academic_paper_submission where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

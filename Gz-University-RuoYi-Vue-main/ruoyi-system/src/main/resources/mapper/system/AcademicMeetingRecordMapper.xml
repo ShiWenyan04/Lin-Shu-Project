@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AcademicMeetingRecordMapper">
+
+    <resultMap type="AcademicMeetingRecord" id="AcademicMeetingRecordResult">
+        <result property="id"    column="id"    />
+        <result property="meetingName"    column="meeting_name"    />
+        <result property="hostUnit"    column="host_unit"    />
+        <result property="participants"    column="participants"    />
+        <result property="departureDate"    column="departure_date"    />
+        <result property="returnDate"    column="return_date"    />
+        <result property="reporter"    column="reporter"    />
+        <result property="reportTopic"    column="report_topic"    />
+        <result property="venue"    column="venue"    />
+        <result property="meetingManual"    column="meeting_manual"    />
+        <result property="photos"    column="photos"    />
+        <result property="isReport"    column="is_report"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
+        <result property="remark"     column="remark"      />
+    </resultMap>
+
+    <sql id="selectAcademicMeetingRecordVo">
+        select id, meeting_name, host_unit, participants, departure_date, return_date, reporter, report_topic, venue, meeting_manual, photos, is_report, audit_status, audit_reason, create_by, create_time, remark from academic_meeting_record
+    </sql>
+
+    <select id="selectAcademicMeetingRecordList" parameterType="AcademicMeetingRecord" resultMap="AcademicMeetingRecordResult">
+        <include refid="selectAcademicMeetingRecordVo"/>
+        <where>
+            <if test="meetingName != null  and meetingName != ''"> and meeting_name like concat('%', #{meetingName}, '%')</if>
+            <if test="hostUnit != null  and hostUnit != ''"> and host_unit like concat('%', #{hostUnit}, '%')</if>
+            <if test="reporter != null  and reporter != ''"> and reporter like concat('%', #{reporter}, '%')</if>
+            <if test="auditStatus != null  and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+
+            <if test="params.queryMode == 'private'">
+                AND (
+                create_by = #{createBy}
+                <if test="params.currentUserNickName != null and params.currentUserNickName != ''">
+                    OR participants LIKE concat('%', #{params.currentUserNickName}, '%')
+                </if>
+                )
+            </if>
+
+            <if test="params.queryMode == 'public'">
+                and audit_status = '1'
+            </if>
+
+        </where>
+    </select>
+
+    <select id="selectAcademicMeetingRecordById" parameterType="Long" resultMap="AcademicMeetingRecordResult">
+        <include refid="selectAcademicMeetingRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAcademicMeetingRecord" parameterType="AcademicMeetingRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into academic_meeting_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="meetingName != null and meetingName != ''">meeting_name,</if>
+            <if test="hostUnit != null and hostUnit != ''">host_unit,</if>
+            <if test="participants != null">participants,</if>
+            <if test="departureDate != null">departure_date,</if>
+            <if test="returnDate != null">return_date,</if>
+            <if test="reporter != null">reporter,</if>
+            <if test="reportTopic != null">report_topic,</if>
+            <if test="venue != null">venue,</if>
+            <if test="meetingManual != null">meeting_manual,</if>
+            <if test="photos != null">photos,</if>
+            <if test="isReport != null">is_report,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="meetingName != null and meetingName != ''">#{meetingName},</if>
+            <if test="hostUnit != null and hostUnit != ''">#{hostUnit},</if>
+            <if test="participants != null">#{participants},</if>
+            <if test="departureDate != null">#{departureDate},</if>
+            <if test="returnDate != null">#{returnDate},</if>
+            <if test="reporter != null">#{reporter},</if>
+            <if test="reportTopic != null">#{reportTopic},</if>
+            <if test="venue != null">#{venue},</if>
+            <if test="meetingManual != null">#{meetingManual},</if>
+            <if test="photos != null">#{photos},</if>
+            <if test="isReport != null">#{isReport},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAcademicMeetingRecord" parameterType="AcademicMeetingRecord">
+        update academic_meeting_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="meetingName != null and meetingName != ''">meeting_name = #{meetingName},</if>
+            <if test="hostUnit != null and hostUnit != ''">host_unit = #{hostUnit},</if>
+            <if test="participants != null">participants = #{participants},</if>
+            <if test="departureDate != null">departure_date = #{departureDate},</if>
+            <if test="returnDate != null">return_date = #{returnDate},</if>
+            <if test="reporter != null">reporter = #{reporter},</if>
+            <if test="reportTopic != null">report_topic = #{reportTopic},</if>
+            <if test="venue != null">venue = #{venue},</if>
+            <if test="meetingManual != null">meeting_manual = #{meetingManual},</if>
+            <if test="photos != null">photos = #{photos},</if>
+            <if test="isReport != null">is_report = #{isReport},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcademicMeetingRecordById" parameterType="Long">
+        delete from academic_meeting_record where id = #{id}
+    </delete>
+
+    <delete id="deleteAcademicMeetingRecordByIds" parameterType="String">
+        delete from academic_meeting_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="auditAcademicMeetingRecord" parameterType="Map">
+        update academic_meeting_record
+        set audit_status = #{auditStatus},
+            audit_reason = #{auditReason}
+        where id = #{id}
+    </update>
+
+</mapper>

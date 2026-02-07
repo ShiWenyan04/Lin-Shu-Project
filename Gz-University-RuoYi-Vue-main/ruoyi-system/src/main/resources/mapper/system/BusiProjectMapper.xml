@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiProjectMapper">
+    
+    <resultMap type="BusiProject" id="BusiProjectResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="location"    column="location"    />
+        <result property="leaderName"    column="leader_name"    />
+        <result property="source"    column="source"    />
+        <result property="contractInfo"    column="contract_info"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"      column="end_date"      />
+    </resultMap>
+
+    <sql id="selectBusiProjectVo">
+        select project_id, project_code, project_name, location, leader_name, source, start_date, end_date, contract_info, create_by, create_time, update_by, update_time, remark from busi_project
+    </sql>
+
+    <select id="selectBusiProjectList" parameterType="BusiProject" resultMap="BusiProjectResult">
+        <include refid="selectBusiProjectVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="leaderName != null  and leaderName != ''"> and leader_name like concat('%', #{leaderName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiProjectByProjectId" parameterType="Long" resultMap="BusiProjectResult">
+        <include refid="selectBusiProjectVo"/>
+        where project_id = #{projectId}
+    </select>
+
+    <insert id="insertBusiProject" parameterType="BusiProject" useGeneratedKeys="true" keyProperty="projectId">
+        insert into busi_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="location != null">location,</if>
+            <if test="leaderName != null">leader_name,</if>
+            <if test="source != null">source,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="contractInfo != null">contract_info,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="location != null">#{location},</if>
+            <if test="leaderName != null">#{leaderName},</if>
+            <if test="source != null">#{source},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="contractInfo != null">#{contractInfo},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiProject" parameterType="BusiProject">
+        update busi_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null">project_code = #{projectCode},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="leaderName != null">leader_name = #{leaderName},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="contractInfo != null">contract_info = #{contractInfo},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteBusiProjectByProjectId" parameterType="Long">
+        delete from busi_project where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteBusiProjectByProjectIds" parameterType="String">
+        delete from busi_project where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>

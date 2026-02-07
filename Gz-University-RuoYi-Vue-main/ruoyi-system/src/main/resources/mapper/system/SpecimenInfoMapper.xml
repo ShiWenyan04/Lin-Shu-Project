@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SpecimenInfoMapper">
+
+    <resultMap type="SpecimenInfo" id="SpecimenInfoResult">
+        <result property="id"    column="id"    />
+        <result property="sequenceNo"    column="sequence_no"    />
+        <result property="specimenCategory"    column="specimen_category"    />
+        <result property="specimenName"    column="specimen_name"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="productionDate"    column="production_date"    />
+        <result property="producer"    column="producer"    />
+        <!-- 添加新字段的映射 -->
+        <result property="status"    column="status"    />
+        <result property="source"    column="source"    />
+        <result property="collectionPlace"    column="collection_place"    />
+    </resultMap>
+
+    <sql id="selectSpecimenInfoVo">
+        select id, sequence_no, specimen_category, specimen_name, quantity, production_date, producer, status, source, collection_place from specimen_info
+    </sql>
+
+    <select id="selectSpecimenInfoList" parameterType="SpecimenInfo" resultMap="SpecimenInfoResult">
+        <include refid="selectSpecimenInfoVo"/>
+        <where>
+            <if test="sequenceNo != null "> and sequence_no = #{sequenceNo}</if>
+            <if test="specimenCategory != null  and specimenCategory != ''"> and specimen_category = #{specimenCategory}</if>
+            <if test="specimenName != null  and specimenName != ''"> and specimen_name like concat('%', #{specimenName}, '%')</if>
+            <if test="quantity != null "> and quantity = #{quantity}</if>
+            <if test="productionDate != null "> and production_date = #{productionDate}</if>
+            <if test="producer != null  and producer != ''"> and producer = #{producer}</if>
+            <!-- 添加新字段的查询条件 -->
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="source != null  and source != ''"> and source like concat('%', #{source}, '%')</if>
+            <if test="collectionPlace != null  and collectionPlace != ''"> and collection_place like concat('%', #{collectionPlace}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectSpecimenInfoById" parameterType="Long" resultMap="SpecimenInfoResult">
+        <include refid="selectSpecimenInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSpecimenInfo" parameterType="SpecimenInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into specimen_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no,</if>
+            <if test="specimenCategory != null and specimenCategory != ''">specimen_category,</if>
+            <if test="specimenName != null and specimenName != ''">specimen_name,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="productionDate != null">production_date,</if>
+            <if test="producer != null">producer,</if>
+            <!-- 添加新字段 -->
+            <if test="status != null and status != ''">status,</if>
+            <if test="source != null and source != ''">source,</if>
+            <if test="collectionPlace != null and collectionPlace != ''">collection_place,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">#{sequenceNo},</if>
+            <if test="specimenCategory != null and specimenCategory != ''">#{specimenCategory},</if>
+            <if test="specimenName != null and specimenName != ''">#{specimenName},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="productionDate != null">#{productionDate},</if>
+            <if test="producer != null">#{producer},</if>
+            <!-- 添加新字段的值 -->
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="source != null and source != ''">#{source},</if>
+            <if test="collectionPlace != null and collectionPlace != ''">#{collectionPlace},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSpecimenInfo" parameterType="SpecimenInfo">
+        update specimen_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no = #{sequenceNo},</if>
+            <if test="specimenCategory != null and specimenCategory != ''">specimen_category = #{specimenCategory},</if>
+            <if test="specimenName != null and specimenName != ''">specimen_name = #{specimenName},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="productionDate != null">production_date = #{productionDate},</if>
+            <if test="producer != null">producer = #{producer},</if>
+            <!-- 添加新字段的更新 -->
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="source != null and source != ''">source = #{source},</if>
+            <if test="collectionPlace != null and collectionPlace != ''">collection_place = #{collectionPlace},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSpecimenInfoById" parameterType="Long">
+        delete from specimen_info where id = #{id}
+    </delete>
+
+    <delete id="deleteSpecimenInfoByIds" parameterType="String">
+        delete from specimen_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

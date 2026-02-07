@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SequencingSampleMapper">
+
+    <resultMap type="SequencingSample" id="SequencingSampleResult">
+        <result property="id" column="id"/>
+        <result property="sequencingNo" column="sequencing_no"/>
+        <result property="sampleName" column="sample_name"/>
+        <result property="host" column="host"/>
+        <result property="sampleType" column="sample_type"/>
+        <result property="samplingLocation" column="sampling_location"/>
+        <result property="habitatType" column="habitat_type"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="samplingTime" column="sampling_time"/>
+        <result property="samplingPerson" column="sampling_person"/>
+        <result property="sequencingType" column="sequencing_type"/>
+        <result property="sequencer" column="sequencer"/>
+        <result property="sequencingCompany" column="sequencing_company"/>
+        <result property="sequencingDate" column="sequencing_date"/>
+        <result property="storageLocation" column="storage_location"/>
+    </resultMap>
+
+    <sql id="selectSequencingSampleVo">
+        select id, sequencing_no, sample_name, host, sample_type, sampling_location, habitat_type, longitude, latitude, sampling_time, sampling_person, sequencing_type, sequencer, sequencing_company, sequencing_date, storage_location from sequencing_sample
+    </sql>
+
+    <select id="selectSequencingSampleList" parameterType="SequencingSample" resultMap="SequencingSampleResult">
+        <include refid="selectSequencingSampleVo"/>
+        <where>
+            <if test="sequencingNo != null"> and sequencing_no = #{sequencingNo}</if>
+            <if test="sampleName != null and sampleName != ''"> and sample_name like concat('%', #{sampleName}, '%')</if>
+            <if test="host != null and host != ''"> and host like concat('%', #{host}, '%')</if>
+            <if test="sampleType != null and sampleType != ''"> and sample_type = #{sampleType}</if>
+            <if test="samplingLocation != null and samplingLocation != ''"> and sampling_location like concat('%', #{samplingLocation}, '%')</if>
+            <if test="habitatType != null and habitatType != ''"> and habitat_type = #{habitatType}</if>
+            <if test="longitude != null"> and longitude = #{longitude}</if>
+            <if test="latitude != null"> and latitude = #{latitude}</if>
+            <if test="samplingTime != null"> and sampling_time = #{samplingTime}</if>
+            <if test="samplingPerson != null and samplingPerson != ''"> and sampling_person like concat('%', #{samplingPerson}, '%')</if>
+            <if test="sequencingType != null and sequencingType != ''"> and sequencing_type = #{sequencingType}</if>
+            <if test="sequencer != null and sequencer != ''"> and sequencer like concat('%', #{sequencer}, '%')</if>
+            <if test="sequencingCompany != null and sequencingCompany != ''"> and sequencing_company = #{sequencingCompany}</if>
+            <if test="sequencingDate != null"> and sequencing_date = #{sequencingDate}</if>
+            <if test="storageLocation != null and storageLocation != ''"> and storage_location like concat('%', #{storageLocation}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectSequencingSampleBySampleName" parameterType="String" resultMap="SequencingSampleResult">
+        <include refid="selectSequencingSampleVo"/>
+        WHERE sample_name = #{sampleName} LIMIT 1
+    </select>
+
+    <select id="selectSequencingSampleById" parameterType="Long" resultMap="SequencingSampleResult">
+        <include refid="selectSequencingSampleVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSequencingSample" parameterType="SequencingSample" useGeneratedKeys="true" keyProperty="id">
+        insert into sequencing_sample
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequencingNo != null">sequencing_no,</if>
+            <if test="sampleName != null and sampleName != ''">sample_name,</if>
+            <if test="host != null and host != ''">host,</if>
+            <if test="sampleType != null and sampleType != ''">sample_type,</if>
+            <if test="samplingLocation != null and samplingLocation != ''">sampling_location,</if>
+            <if test="habitatType != null and habitatType != ''">habitat_type,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="samplingTime != null">sampling_time,</if>
+            <if test="samplingPerson != null and samplingPerson != ''">sampling_person,</if>
+            <if test="sequencingType != null and sequencingType != ''">sequencing_type,</if>
+            <if test="sequencer != null and sequencer != ''">sequencer,</if>
+            <if test="sequencingCompany != null and sequencingCompany != ''">sequencing_company,</if>
+            <if test="sequencingDate != null">sequencing_date,</if>
+            <if test="storageLocation != null and storageLocation != ''">storage_location,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequencingNo != null">#{sequencingNo},</if>
+            <if test="sampleName != null and sampleName != ''">#{sampleName},</if>
+            <if test="host != null and host != ''">#{host},</if>
+            <if test="sampleType != null and sampleType != ''">#{sampleType},</if>
+            <if test="samplingLocation != null and samplingLocation != ''">#{samplingLocation},</if>
+            <if test="habitatType != null and habitatType != ''">#{habitatType},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="samplingTime != null">#{samplingTime},</if>
+            <if test="samplingPerson != null and samplingPerson != ''">#{samplingPerson},</if>
+            <if test="sequencingType != null and sequencingType != ''">#{sequencingType},</if>
+            <if test="sequencer != null and sequencer != ''">#{sequencer},</if>
+            <if test="sequencingCompany != null and sequencingCompany != ''">#{sequencingCompany},</if>
+            <if test="sequencingDate != null">#{sequencingDate},</if>
+            <if test="storageLocation != null and storageLocation != ''">#{storageLocation},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSequencingSample" parameterType="SequencingSample">
+        update sequencing_sample
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sequencingNo != null">sequencing_no = #{sequencingNo},</if>
+            <if test="sampleName != null and sampleName != ''">sample_name = #{sampleName},</if>
+            <if test="host != null and host != ''">host = #{host},</if>
+            <if test="sampleType != null and sampleType != ''">sample_type = #{sampleType},</if>
+            <if test="samplingLocation != null and samplingLocation != ''">sampling_location = #{samplingLocation},</if>
+            <if test="habitatType != null and habitatType != ''">habitat_type = #{habitatType},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="samplingTime != null">sampling_time = #{samplingTime},</if>
+            <if test="samplingPerson != null and samplingPerson != ''">sampling_person = #{samplingPerson},</if>
+            <if test="sequencingType != null and sequencingType != ''">sequencing_type = #{sequencingType},</if>
+            <if test="sequencer != null and sequencer != ''">sequencer = #{sequencer},</if>
+            <if test="sequencingCompany != null and sequencingCompany != ''">sequencing_company = #{sequencingCompany},</if>
+            <if test="sequencingDate != null">sequencing_date = #{sequencingDate},</if>
+            <if test="storageLocation != null and storageLocation != ''">storage_location = #{storageLocation},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSequencingSampleById" parameterType="Long">
+        delete from sequencing_sample where id = #{id}
+    </delete>
+
+    <delete id="deleteSequencingSampleByIds" parameterType="String">
+        delete from sequencing_sample where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

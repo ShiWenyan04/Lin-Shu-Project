@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FieldworkBorrowingMapper">
+
+    <resultMap type="FieldworkBorrowing" id="FieldworkBorrowingResult">
+        <result property="id"    column="id"    />
+        <result property="equipmentId"    column="equipment_id"    />
+        <result property="equipmentName"    column="equipment_name"    />
+        <result property="model"    column="model"    />
+        <result property="borrower"    column="borrower"    />
+        <result property="borrowQty"    column="borrow_qty"    />
+        <result property="borrowTime"    column="borrow_time"    />
+        <result property="location"    column="location"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="tutorName"    column="tutor_name"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="returnCount"    column="return_count"    />
+    </resultMap>
+
+    <sql id="selectFieldworkBorrowingVo">
+        select id, equipment_id, equipment_name, model, borrower, borrow_qty, borrow_time, location, project_id, project_name, tutor_name, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from fieldwork_borrowing
+    </sql>
+
+    <select id="selectFieldworkBorrowingList" parameterType="FieldworkBorrowing" resultMap="FieldworkBorrowingResult">
+        select
+        b.id,
+        b.equipment_id,
+        b.equipment_name,
+        b.model,
+        b.borrower,
+        b.borrow_qty,
+        b.borrow_time,
+        b.location,
+        b.project_id,
+        b.project_name,
+        b.tutor_name,
+        b.audit_status,
+        b.audit_reason,
+        b.create_by,
+        b.create_time,
+        b.update_by,
+        b.update_time,
+        b.remark,
+
+        /* ✨✨✨ 修改点：只统计 return_qty (归还数量) ✨✨✨ */
+        (
+        SELECT IFNULL(SUM(r.return_qty), 0)
+        FROM camera_return r
+        WHERE r.borrow_id = b.id
+        AND r.audit_status = '1'
+        ) AS return_count
+        /* ✨✨✨ 修改结束 ✨✨✨ */
+
+        from fieldwork_borrowing b
+        <where>
+            <if test="equipmentName != null  and equipmentName != ''"> and b.equipment_name like concat('%', #{equipmentName}, '%')</if>
+            <if test="borrower != null  and borrower != ''"> and b.borrower = #{borrower}</if>
+            <if test="projectName != null  and projectName != ''"> and b.project_name like concat('%', #{projectName}, '%')</if>
+
+            <if test="params.queryMode == 'public'">
+                AND b.audit_status = '1'
+            </if>
+
+            <if test="params.queryMode == 'private'">
+                AND b.create_by = #{createBy}
+            </if>
+
+            <if test="params.queryMode == 'audit'">
+                AND b.audit_status != '1'
+            </if>
+
+            <if test="auditStatus != null and auditStatus != ''">
+                AND b.audit_status = #{auditStatus}
+            </if>
+        </where>
+        order by b.create_time desc
+    </select>
+
+    <select id="selectFieldworkBorrowingById" parameterType="Long" resultMap="FieldworkBorrowingResult">
+        select
+            b.id, b.equipment_id, b.equipment_name, b.model, b.borrower, b.borrow_qty, b.borrow_time, b.location, b.project_id, b.project_name, b.tutor_name, b.audit_status, b.audit_reason, b.create_by, b.create_time, b.update_by, b.update_time, b.remark,
+            /* ✨✨✨ 修改点：详情查询也只统计 return_qty ✨✨✨ */
+            (
+                SELECT IFNULL(SUM(r.return_qty), 0)
+                FROM camera_return r
+                WHERE r.borrow_id = b.id AND r.audit_status = '1'
+            ) AS return_count
+        from fieldwork_borrowing b
+        where b.id = #{id}
+    </select>
+
+    <insert id="insertFieldworkBorrowing" parameterType="FieldworkBorrowing" useGeneratedKeys="true" keyProperty="id">
+        insert into fieldwork_borrowing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="equipmentId != null">equipment_id,</if>
+            <if test="equipmentName != null">equipment_name,</if>
+            <if test="model != null">model,</if>
+            <if test="borrower != null and borrower != ''">borrower,</if>
+            <if test="borrowQty != null">borrow_qty,</if>
+            <if test="borrowTime != null">borrow_time,</if>
+            <if test="location != null">location,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="tutorName != null">tutor_name,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="equipmentId != null">#{equipmentId},</if>
+            <if test="equipmentName != null">#{equipmentName},</if>
+            <if test="model != null">#{model},</if>
+            <if test="borrower != null and borrower != ''">#{borrower},</if>
+            <if test="borrowQty != null">#{borrowQty},</if>
+            <if test="borrowTime != null">#{borrowTime},</if>
+            <if test="location != null">#{location},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="tutorName != null">#{tutorName},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFieldworkBorrowing" parameterType="FieldworkBorrowing">
+        update fieldwork_borrowing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="equipmentId != null">equipment_id = #{equipmentId},</if>
+            <if test="equipmentName != null">equipment_name = #{equipmentName},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="borrower != null and borrower != ''">borrower = #{borrower},</if>
+            <if test="borrowQty != null">borrow_qty = #{borrowQty},</if>
+            <if test="borrowTime != null">borrow_time = #{borrowTime},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="tutorName != null">tutor_name = #{tutorName},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFieldworkBorrowingById" parameterType="Long">
+        delete from fieldwork_borrowing where id = #{id}
+    </delete>
+
+    <delete id="deleteFieldworkBorrowingByIds" parameterType="String">
+        delete from fieldwork_borrowing where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

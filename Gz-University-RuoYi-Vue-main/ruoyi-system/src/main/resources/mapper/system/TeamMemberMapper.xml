@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TeamMemberMapper">
+    
+    <resultMap type="TeamMember" id="TeamMemberResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="gender"    column="gender"    />
+        <result property="researchDirection"    column="research_direction"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="phone"    column="phone"    />
+        <result property="email"    column="email"    />
+        <result property="bankCard"    column="bank_card"    />
+        <result property="enrollmentDate"    column="enrollment_date"    />
+        <result property="currentEducation"    column="current_education"    />
+        <result property="currentStatus"    column="current_status"    />
+    </resultMap>
+
+    <sql id="selectTeamMemberVo">
+        select id, name, gender, research_direction, student_id, phone, email, bank_card, enrollment_date, current_education, current_status from team_member
+    </sql>
+
+    <select id="selectTeamMemberList" parameterType="TeamMember" resultMap="TeamMemberResult">
+        <include refid="selectTeamMemberVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="researchDirection != null  and researchDirection != ''"> and research_direction = #{researchDirection}</if>
+            <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="bankCard != null  and bankCard != ''"> and bank_card = #{bankCard}</if>
+            <if test="enrollmentDate != null "> and enrollment_date = #{enrollmentDate}</if>
+            <if test="currentEducation != null  and currentEducation != ''"> and current_education = #{currentEducation}</if>
+            <if test="currentStatus != null  and currentStatus != ''"> and current_status = #{currentStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectTeamMemberById" parameterType="Long" resultMap="TeamMemberResult">
+        <include refid="selectTeamMemberVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTeamMember" parameterType="TeamMember" useGeneratedKeys="true" keyProperty="id">
+        insert into team_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="gender != null and gender != ''">gender,</if>
+            <if test="researchDirection != null and researchDirection != ''">research_direction,</if>
+            <if test="studentId != null and studentId != ''">student_id,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="bankCard != null">bank_card,</if>
+            <if test="enrollmentDate != null">enrollment_date,</if>
+            <if test="currentEducation != null and currentEducation != ''">current_education,</if>
+            <if test="currentStatus != null and currentStatus != ''">current_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="gender != null and gender != ''">#{gender},</if>
+            <if test="researchDirection != null and researchDirection != ''">#{researchDirection},</if>
+            <if test="studentId != null and studentId != ''">#{studentId},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="bankCard != null">#{bankCard},</if>
+            <if test="enrollmentDate != null">#{enrollmentDate},</if>
+            <if test="currentEducation != null and currentEducation != ''">#{currentEducation},</if>
+            <if test="currentStatus != null and currentStatus != ''">#{currentStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTeamMember" parameterType="TeamMember">
+        update team_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="researchDirection != null and researchDirection != ''">research_direction = #{researchDirection},</if>
+            <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="bankCard != null">bank_card = #{bankCard},</if>
+            <if test="enrollmentDate != null">enrollment_date = #{enrollmentDate},</if>
+            <if test="currentEducation != null and currentEducation != ''">current_education = #{currentEducation},</if>
+            <if test="currentStatus != null and currentStatus != ''">current_status = #{currentStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTeamMemberById" parameterType="Long">
+        delete from team_member where id = #{id}
+    </delete>
+
+    <delete id="deleteTeamMemberByIds" parameterType="String">
+        delete from team_member where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

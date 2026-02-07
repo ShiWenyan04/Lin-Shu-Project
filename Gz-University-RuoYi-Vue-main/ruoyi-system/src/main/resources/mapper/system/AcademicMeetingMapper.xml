@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AcademicMeetingMapper">
+    
+    <resultMap type="AcademicMeeting" id="AcademicMeetingResult">
+        <result property="id"    column="id"    />
+        <result property="year"    column="year"    />
+        <result property="meetingName"    column="meeting_name"    />
+        <result property="hostUnit"    column="host_unit"    />
+        <result property="holdTime"    column="hold_time"    />
+        <result property="location"    column="location"    />
+        <result property="meetingNotice"    column="meeting_notice"    />
+        <result property="signUpStart"    column="sign_up_start"    />
+        <result property="signUpEnd"    column="sign_up_end"    />
+        <result property="registerFee"    column="register_fee"    />
+        <result property="participants"    column="participants"    />
+        <result property="reporter"    column="reporter"    />
+    </resultMap>
+
+    <sql id="selectAcademicMeetingVo">
+        select id, year, meeting_name, host_unit, hold_time, location, meeting_notice, sign_up_start, sign_up_end, register_fee, participants, reporter from academic_meeting
+    </sql>
+
+    <select id="selectAcademicMeetingList" parameterType="AcademicMeeting" resultMap="AcademicMeetingResult">
+        <include refid="selectAcademicMeetingVo"/>
+        <where>  
+            <if test="year != null "> and year = #{year}</if>
+            <if test="meetingName != null  and meetingName != ''"> and meeting_name like concat('%', #{meetingName}, '%')</if>
+            <if test="holdTime != null "> and hold_time = #{holdTime}</if>
+            <if test="participants != null  and participants != ''"> and participants like concat('%', #{participants}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectAcademicMeetingById" parameterType="Long" resultMap="AcademicMeetingResult">
+        <include refid="selectAcademicMeetingVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAcademicMeeting" parameterType="AcademicMeeting" useGeneratedKeys="true" keyProperty="id">
+        insert into academic_meeting
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="year != null">year,</if>
+            <if test="meetingName != null and meetingName != ''">meeting_name,</if>
+            <if test="hostUnit != null and hostUnit != ''">host_unit,</if>
+            <if test="holdTime != null">hold_time,</if>
+            <if test="location != null and location != ''">location,</if>
+            <if test="meetingNotice != null and meetingNotice != ''">meeting_notice,</if>
+            <if test="signUpStart != null">sign_up_start,</if>
+            <if test="signUpEnd != null">sign_up_end,</if>
+            <if test="registerFee != null">register_fee,</if>
+            <if test="participants != null and participants != ''">participants,</if>
+            <if test="reporter != null">reporter,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="year != null">#{year},</if>
+            <if test="meetingName != null and meetingName != ''">#{meetingName},</if>
+            <if test="hostUnit != null and hostUnit != ''">#{hostUnit},</if>
+            <if test="holdTime != null">#{holdTime},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="meetingNotice != null and meetingNotice != ''">#{meetingNotice},</if>
+            <if test="signUpStart != null">#{signUpStart},</if>
+            <if test="signUpEnd != null">#{signUpEnd},</if>
+            <if test="registerFee != null">#{registerFee},</if>
+            <if test="participants != null and participants != ''">#{participants},</if>
+            <if test="reporter != null">#{reporter},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcademicMeeting" parameterType="AcademicMeeting">
+        update academic_meeting
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null">year = #{year},</if>
+            <if test="meetingName != null and meetingName != ''">meeting_name = #{meetingName},</if>
+            <if test="hostUnit != null and hostUnit != ''">host_unit = #{hostUnit},</if>
+            <if test="holdTime != null">hold_time = #{holdTime},</if>
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="meetingNotice != null">meeting_notice = #{meetingNotice},</if>
+            <if test="signUpStart != null">sign_up_start = #{signUpStart},</if>
+            <if test="signUpEnd != null">sign_up_end = #{signUpEnd},</if>
+            <if test="registerFee != null">register_fee = #{registerFee},</if>
+            <if test="participants != null">participants = #{participants},</if>
+            <if test="reporter != null">reporter = #{reporter},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcademicMeetingById" parameterType="Long">
+        delete from academic_meeting where id = #{id}
+    </delete>
+
+    <delete id="deleteAcademicMeetingByIds" parameterType="String">
+        delete from academic_meeting where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

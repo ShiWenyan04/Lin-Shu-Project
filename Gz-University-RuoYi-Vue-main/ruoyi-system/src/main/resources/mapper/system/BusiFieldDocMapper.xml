@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiFieldDocMapper">
+    
+    <resultMap type="BusiFieldDoc" id="BusiFieldDocResult">
+        <result property="docId"    column="doc_id"    />
+        <result property="docName"    column="doc_name"    />
+        <result property="docCategory"    column="doc_category"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBusiFieldDocVo">
+        select doc_id, doc_name, doc_category, file_url, sort_order, create_by, create_time, update_by, update_time, remark from busi_field_doc
+    </sql>
+
+    <select id="selectBusiFieldDocList" parameterType="BusiFieldDoc" resultMap="BusiFieldDocResult">
+        <include refid="selectBusiFieldDocVo"/>
+        <where>  
+            <if test="docName != null  and docName != ''"> and doc_name like concat('%', #{docName}, '%')</if>
+            <if test="docCategory != null  and docCategory != ''"> and doc_category = #{docCategory}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiFieldDocByDocId" parameterType="Long" resultMap="BusiFieldDocResult">
+        <include refid="selectBusiFieldDocVo"/>
+        where doc_id = #{docId}
+    </select>
+
+    <insert id="insertBusiFieldDoc" parameterType="BusiFieldDoc" useGeneratedKeys="true" keyProperty="docId">
+        insert into busi_field_doc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="docName != null and docName != ''">doc_name,</if>
+            <if test="docCategory != null">doc_category,</if>
+            <if test="fileUrl != null and fileUrl != ''">file_url,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="docName != null and docName != ''">#{docName},</if>
+            <if test="docCategory != null">#{docCategory},</if>
+            <if test="fileUrl != null and fileUrl != ''">#{fileUrl},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiFieldDoc" parameterType="BusiFieldDoc">
+        update busi_field_doc
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="docName != null and docName != ''">doc_name = #{docName},</if>
+            <if test="docCategory != null">doc_category = #{docCategory},</if>
+            <if test="fileUrl != null and fileUrl != ''">file_url = #{fileUrl},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where doc_id = #{docId}
+    </update>
+
+    <delete id="deleteBusiFieldDocByDocId" parameterType="Long">
+        delete from busi_field_doc where doc_id = #{docId}
+    </delete>
+
+    <delete id="deleteBusiFieldDocByDocIds" parameterType="String">
+        delete from busi_field_doc where doc_id in 
+        <foreach item="docId" collection="array" open="(" separator="," close=")">
+            #{docId}
+        </foreach>
+    </delete>
+</mapper>

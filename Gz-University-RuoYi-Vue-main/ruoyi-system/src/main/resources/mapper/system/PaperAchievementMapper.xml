@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.system.PaperAchievementMapper">
+
+    <resultMap type="PaperAchievement" id="PaperAchievementResult">
+        <result property="id"    column="id"    />
+        <result property="serialNumber"    column="serial_number"    />
+        <result property="firstAuthor"    column="first_author"    />
+        <result property="degreeType"    column="degree_type"    />
+        <result property="grade"    column="grade"    />
+        <result property="supervisor"    column="supervisor"    />
+        <result property="otherAuthors"    column="other_authors"    />
+        <result property="title"    column="title"    />
+        <result property="journal"    column="journal"    />
+        <result property="casPartition"    column="cas_partition"    />
+        <result property="isTop"    column="is_top"    />
+        <result property="isNaturalIndex"    column="is_natural_index"    />
+        <result property="impactFactor"    column="impact_factor"    />
+        <result property="doi"    column="doi"    />
+        <result property="submissionDate"    column="submission_date"    />
+        <result property="acceptanceDate"    column="acceptance_date"    />
+        <result property="publicationDate"    column="publication_date"    />
+        <result property="paperAbstract"    column="paper_abstract"    />
+        <result property="directionCategory"    column="direction_category"    />
+        <result property="apaCitation"    column="apa_citation"    />
+        <result property="pageFee"    column="page_fee"    />
+        <result property="inclusionProof"    column="inclusion_proof"    />
+        <result property="rewardStatus"    column="reward_status"    />
+        <result property="rewardAmount"    column="reward_amount"    />
+        <result property="rewardDate"    column="reward_date"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPaperAchievementVo">
+        select id, serial_number, first_author, degree_type, grade, supervisor, other_authors, title, journal, cas_partition, is_top, is_natural_index, impact_factor, doi, submission_date, acceptance_date, publication_date, paper_abstract, direction_category, apa_citation, page_fee, inclusion_proof, reward_status, reward_amount, reward_date, audit_status, create_by, create_time, update_by, update_time, remark from paper_achievement
+    </sql>
+
+    <select id="selectPaperAchievementList" parameterType="PaperAchievement" resultMap="PaperAchievementResult">
+        <include refid="selectPaperAchievementVo"/>
+        <where>
+            <if test="degreeType != null  and degreeType != ''"> and degree_type = #{degreeType}</if>
+            <if test="casPartition != null  and casPartition != ''"> and cas_partition = #{casPartition}</if>
+            <if test="publicationDate != null "> and publication_date = #{publicationDate}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+
+            <if test="auditStatus != null and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+
+            <if test="params.queryMode == 'public'"> and audit_status = '1'</if>
+
+            <if test="params.queryMode == 'audit'"> and audit_status = '0'</if>
+        </where>
+    </select>
+
+    <select id="selectPaperAchievementById" parameterType="Long" resultMap="PaperAchievementResult">
+        <include refid="selectPaperAchievementVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPaperAchievement" parameterType="PaperAchievement" useGeneratedKeys="true" keyProperty="id">
+        insert into paper_achievement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number,</if>
+            <if test="firstAuthor != null and firstAuthor != ''">first_author,</if>
+            <if test="degreeType != null and degreeType != ''">degree_type,</if>
+            <if test="grade != null and grade != ''">grade,</if>
+            <if test="supervisor != null and supervisor != ''">supervisor,</if>
+            <if test="otherAuthors != null and otherAuthors != ''">other_authors,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="journal != null and journal != ''">journal,</if>
+            <if test="casPartition != null">cas_partition,</if>
+            <if test="isTop != null and isTop != ''">is_top,</if>
+            <if test="isNaturalIndex != null and isNaturalIndex != ''">is_natural_index,</if>
+            <if test="impactFactor != null">impact_factor,</if>
+            <if test="doi != null and doi != ''">doi,</if>
+            <if test="submissionDate != null">submission_date,</if>
+            <if test="acceptanceDate != null">acceptance_date,</if>
+            <if test="publicationDate != null">publication_date,</if>
+            <if test="paperAbstract != null and paperAbstract != ''">paper_abstract,</if>
+            <if test="directionCategory != null and directionCategory != ''">direction_category,</if>
+            <if test="apaCitation != null and apaCitation != ''">apa_citation,</if>
+            <if test="pageFee != null">page_fee,</if>
+            <if test="inclusionProof != null and inclusionProof != ''">inclusion_proof,</if>
+            <if test="rewardStatus != null and rewardStatus != ''">reward_status,</if>
+            <if test="rewardAmount != null">reward_amount,</if>
+            <if test="rewardDate != null">reward_date,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">#{serialNumber},</if>
+            <if test="firstAuthor != null and firstAuthor != ''">#{firstAuthor},</if>
+            <if test="degreeType != null and degreeType != ''">#{degreeType},</if>
+            <if test="grade != null and grade != ''">#{grade},</if>
+            <if test="supervisor != null and supervisor != ''">#{supervisor},</if>
+            <if test="otherAuthors != null and otherAuthors != ''">#{otherAuthors},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="journal != null and journal != ''">#{journal},</if>
+            <if test="casPartition != null">#{casPartition},</if>
+            <if test="isTop != null and isTop != ''">#{isTop},</if>
+            <if test="isNaturalIndex != null and isNaturalIndex != ''">#{isNaturalIndex},</if>
+            <if test="impactFactor != null">#{impactFactor},</if>
+            <if test="doi != null and doi != ''">#{doi},</if>
+            <if test="submissionDate != null">#{submissionDate},</if>
+            <if test="acceptanceDate != null">#{acceptanceDate},</if>
+            <if test="publicationDate != null">#{publicationDate},</if>
+            <if test="paperAbstract != null and paperAbstract != ''">#{paperAbstract},</if>
+            <if test="directionCategory != null and directionCategory != ''">#{directionCategory},</if>
+            <if test="apaCitation != null and apaCitation != ''">#{apaCitation},</if>
+            <if test="pageFee != null">#{pageFee},</if>
+            <if test="inclusionProof != null and inclusionProof != ''">#{inclusionProof},</if>
+            <if test="rewardStatus != null and rewardStatus != ''">#{rewardStatus},</if>
+            <if test="rewardAmount != null">#{rewardAmount},</if>
+            <if test="rewardDate != null">#{rewardDate},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePaperAchievement" parameterType="PaperAchievement">
+        update paper_achievement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+            <if test="firstAuthor != null and firstAuthor != ''">first_author = #{firstAuthor},</if>
+            <if test="degreeType != null and degreeType != ''">degree_type = #{degreeType},</if>
+            <if test="grade != null and grade != ''">grade = #{grade},</if>
+            <if test="supervisor != null and supervisor != ''">supervisor = #{supervisor},</if>
+            <if test="otherAuthors != null and otherAuthors != ''">other_authors = #{otherAuthors},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="journal != null and journal != ''">journal = #{journal},</if>
+            <if test="casPartition != null">cas_partition = #{casPartition},</if>
+            <if test="isTop != null and isTop != ''">is_top = #{isTop},</if>
+            <if test="isNaturalIndex != null and isNaturalIndex != ''">is_natural_index = #{isNaturalIndex},</if>
+            <if test="impactFactor != null">impact_factor = #{impactFactor},</if>
+            <if test="doi != null and doi != ''">doi = #{doi},</if>
+            <if test="submissionDate != null">submission_date = #{submissionDate},</if>
+            <if test="acceptanceDate != null">acceptance_date = #{acceptanceDate},</if>
+            <if test="publicationDate != null">publication_date = #{publicationDate},</if>
+            <if test="paperAbstract != null and paperAbstract != ''">paper_abstract = #{paperAbstract},</if>
+            <if test="directionCategory != null and directionCategory != ''">direction_category = #{directionCategory},</if>
+            <if test="apaCitation != null and apaCitation != ''">apa_citation = #{apaCitation},</if>
+            <if test="pageFee != null">page_fee = #{pageFee},</if>
+            <if test="inclusionProof != null and inclusionProof != ''">inclusion_proof = #{inclusionProof},</if>
+            <if test="rewardStatus != null and rewardStatus != ''">reward_status = #{rewardStatus},</if>
+            <if test="rewardAmount != null">reward_amount = #{rewardAmount},</if>
+            <if test="rewardDate != null">reward_date = #{rewardDate},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePaperAchievementById" parameterType="Long">
+        delete from paper_achievement where id = #{id}
+    </delete>
+
+    <delete id="deletePaperAchievementByIds" parameterType="String">
+        delete from paper_achievement where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

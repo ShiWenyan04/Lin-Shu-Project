@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GroupMeetingRecordMapper">
+
+    <resultMap type="GroupMeetingRecord" id="GroupMeetingRecordResult">
+        <result property="id"    column="id"    />
+        <result property="meetingTime"    column="meeting_time"    />
+        <result property="meetingPlace"    column="meeting_place"    />
+        <result property="hostPerson"    column="host_person"    />
+        <result property="participants"    column="participants"    />
+        <result property="absentees"    column="absentees"    />
+        <result property="absentReason"    column="absent_reason"    />
+        <result property="imageUrls"    column="image_urls"    />
+        <result property="fileUrls"    column="file_urls"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
+        <result property="remark"     column="remark"      />
+    </resultMap>
+
+    <sql id="selectGroupMeetingRecordVo">
+        select id, meeting_time, meeting_place, host_person, participants, absentees, absent_reason, image_urls, file_urls, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from group_meeting_record
+    </sql>
+
+    <select id="selectGroupMeetingRecordList" parameterType="GroupMeetingRecord" resultMap="GroupMeetingRecordResult">
+        <include refid="selectGroupMeetingRecordVo"/>
+        <where>
+            <if test="meetingPlace != null  and meetingPlace != ''"> and meeting_place like concat('%', #{meetingPlace}, '%')</if>
+            <if test="hostPerson != null  and hostPerson != ''"> and host_person like concat('%', #{hostPerson}, '%')</if>
+            <if test="auditStatus != null  and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectGroupMeetingRecordById" parameterType="Long" resultMap="GroupMeetingRecordResult">
+        <include refid="selectGroupMeetingRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGroupMeetingRecord" parameterType="GroupMeetingRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into group_meeting_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="meetingTime != null">meeting_time,</if>
+            <if test="meetingPlace != null and meetingPlace != ''">meeting_place,</if>
+            <if test="hostPerson != null and hostPerson != ''">host_person,</if>
+            <if test="participants != null and participants != ''">participants,</if>
+            <if test="absentees != null and absentees != ''">absentees,</if>
+            <if test="absentReason != null">absent_reason,</if>
+            <if test="imageUrls != null and imageUrls != ''">image_urls,</if>
+            <if test="fileUrls != null and fileUrls != ''">file_urls,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="meetingTime != null">#{meetingTime},</if>
+            <if test="meetingPlace != null and meetingPlace != ''">#{meetingPlace},</if>
+            <if test="hostPerson != null and hostPerson != ''">#{hostPerson},</if>
+            <if test="participants != null and participants != ''">#{participants},</if>
+            <if test="absentees != null and absentees != ''">#{absentees},</if>
+            <if test="absentReason != null">#{absentReason},</if>
+            <if test="imageUrls != null and imageUrls != ''">#{imageUrls},</if>
+            <if test="fileUrls != null and fileUrls != ''">#{fileUrls},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGroupMeetingRecord" parameterType="GroupMeetingRecord">
+        update group_meeting_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="meetingTime != null">meeting_time = #{meetingTime},</if>
+            <if test="meetingPlace != null and meetingPlace != ''">meeting_place = #{meetingPlace},</if>
+            <if test="hostPerson != null and hostPerson != ''">host_person = #{hostPerson},</if>
+            <if test="participants != null and participants != ''">participants = #{participants},</if>
+            <if test="absentees != null and absentees != ''">absentees = #{absentees},</if>
+            <if test="absentReason != null">absent_reason = #{absentReason},</if>
+            <if test="imageUrls != null and imageUrls != ''">image_urls = #{imageUrls},</if>
+            <if test="fileUrls != null and fileUrls != ''">file_urls = #{fileUrls},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGroupMeetingRecordById" parameterType="Long">
+        delete from group_meeting_record where id = #{id}
+    </delete>
+
+    <delete id="deleteGroupMeetingRecordByIds" parameterType="String">
+        delete from group_meeting_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

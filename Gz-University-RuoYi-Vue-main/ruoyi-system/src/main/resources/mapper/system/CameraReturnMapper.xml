@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CameraReturnMapper">
+    
+    <resultMap type="CameraReturn" id="CameraReturnResult">
+        <result property="id"    column="id"    />
+        <result property="borrowId"    column="borrow_id"    />
+        <result property="equipmentId"    column="equipment_id"    />
+        <result property="equipmentName"    column="equipment_name"    />
+        <result property="model"    column="model"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="returner"    column="returner"    />
+        <result property="returnTime"    column="return_time"    />
+        <result property="returnQty"    column="return_qty"    />
+        <result property="installAddQty"    column="install_add_qty"    />
+        <result property="scrappedQty"    column="scrapped_qty"    />
+        <result property="stolenQty"    column="stolen_qty"    />
+        <result property="recoveredQty"    column="recovered_qty"    />
+        <result property="location"    column="location"    />
+        <result property="tutorName"    column="tutor_name"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCameraReturnVo">
+        select id, borrow_id, equipment_id, equipment_name, model, project_id, project_name, returner, return_time, return_qty, install_add_qty, scrapped_qty, stolen_qty, recovered_qty, location, tutor_name, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from camera_return
+    </sql>
+
+    <select id="selectCameraReturnList" parameterType="CameraReturn" resultMap="CameraReturnResult">
+        <include refid="selectCameraReturnVo"/>
+        <where>  
+            <if test="equipmentName != null  and equipmentName != ''"> and equipment_name like concat('%', #{equipmentName}, '%')</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="params.queryMode == 'public'">
+                AND audit_status = '1'
+            </if>
+            <if test="params.queryMode == 'private'">
+                AND create_by = #{createBy}
+            </if>
+            <if test="params.queryMode == 'audit'">
+                AND audit_status != '1'
+            </if>
+
+            <if test="auditStatus != null and auditStatus != ''">
+                AND audit_status = #{auditStatus}
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectCameraReturnById" parameterType="Long" resultMap="CameraReturnResult">
+        <include refid="selectCameraReturnVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCameraReturn" parameterType="CameraReturn" useGeneratedKeys="true" keyProperty="id">
+        insert into camera_return
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="borrowId != null">borrow_id,</if>
+            <if test="equipmentId != null">equipment_id,</if>
+            <if test="equipmentName != null">equipment_name,</if>
+            <if test="model != null">model,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="returner != null and returner != ''">returner,</if>
+            <if test="returnTime != null">return_time,</if>
+            <if test="returnQty != null">return_qty,</if>
+            <if test="installAddQty != null">install_add_qty,</if>
+            <if test="scrappedQty != null">scrapped_qty,</if>
+            <if test="stolenQty != null">stolen_qty,</if>
+            <if test="recoveredQty != null">recovered_qty,</if>
+            <if test="location != null">location,</if>
+            <if test="tutorName != null">tutor_name,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="borrowId != null">#{borrowId},</if>
+            <if test="equipmentId != null">#{equipmentId},</if>
+            <if test="equipmentName != null">#{equipmentName},</if>
+            <if test="model != null">#{model},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="returner != null and returner != ''">#{returner},</if>
+            <if test="returnTime != null">#{returnTime},</if>
+            <if test="returnQty != null">#{returnQty},</if>
+            <if test="installAddQty != null">#{installAddQty},</if>
+            <if test="scrappedQty != null">#{scrappedQty},</if>
+            <if test="stolenQty != null">#{stolenQty},</if>
+            <if test="recoveredQty != null">#{recoveredQty},</if>
+            <if test="location != null">#{location},</if>
+            <if test="tutorName != null">#{tutorName},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCameraReturn" parameterType="CameraReturn">
+        update camera_return
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="borrowId != null">borrow_id = #{borrowId},</if>
+            <if test="equipmentId != null">equipment_id = #{equipmentId},</if>
+            <if test="equipmentName != null">equipment_name = #{equipmentName},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="returner != null and returner != ''">returner = #{returner},</if>
+            <if test="returnTime != null">return_time = #{returnTime},</if>
+            <if test="returnQty != null">return_qty = #{returnQty},</if>
+            <if test="installAddQty != null">install_add_qty = #{installAddQty},</if>
+            <if test="scrappedQty != null">scrapped_qty = #{scrappedQty},</if>
+            <if test="stolenQty != null">stolen_qty = #{stolenQty},</if>
+            <if test="recoveredQty != null">recovered_qty = #{recoveredQty},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="tutorName != null">tutor_name = #{tutorName},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCameraReturnById" parameterType="Long">
+        delete from camera_return where id = #{id}
+    </delete>
+
+    <delete id="deleteCameraReturnByIds" parameterType="String">
+        delete from camera_return where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

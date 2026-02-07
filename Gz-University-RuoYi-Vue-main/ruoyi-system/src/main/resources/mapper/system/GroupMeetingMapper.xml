@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GroupMeetingMapper">
+    
+    <resultMap type="GroupMeeting" id="GroupMeetingResult">
+        <result property="id"    column="id"    />
+        <result property="scheduledTime"    column="scheduled_time"    />
+        <result property="location"    column="location"    />
+        <result property="responsiblePerson"    column="responsible_person"    />
+        <result property="meetingDocument"    column="meeting_document"    />
+    </resultMap>
+
+    <sql id="selectGroupMeetingVo">
+        select id, scheduled_time, location, responsible_person, meeting_document from group_meeting
+    </sql>
+
+    <select id="selectGroupMeetingList" parameterType="GroupMeeting" resultMap="GroupMeetingResult">
+        <include refid="selectGroupMeetingVo"/>
+        <where>  
+            <if test="location != null  and location != ''"> and location = #{location}</if>
+        </where>
+    </select>
+    
+    <select id="selectGroupMeetingById" parameterType="Long" resultMap="GroupMeetingResult">
+        <include refid="selectGroupMeetingVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGroupMeeting" parameterType="GroupMeeting" useGeneratedKeys="true" keyProperty="id">
+        insert into group_meeting
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="scheduledTime != null">scheduled_time,</if>
+            <if test="location != null">location,</if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">responsible_person,</if>
+            <if test="meetingDocument != null">meeting_document,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="scheduledTime != null">#{scheduledTime},</if>
+            <if test="location != null">#{location},</if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">#{responsiblePerson},</if>
+            <if test="meetingDocument != null">#{meetingDocument},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGroupMeeting" parameterType="GroupMeeting">
+        update group_meeting
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="scheduledTime != null">scheduled_time = #{scheduledTime},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">responsible_person = #{responsiblePerson},</if>
+            <if test="meetingDocument != null">meeting_document = #{meetingDocument},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGroupMeetingById" parameterType="Long">
+        delete from group_meeting where id = #{id}
+    </delete>
+
+    <delete id="deleteGroupMeetingByIds" parameterType="String">
+        delete from group_meeting where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

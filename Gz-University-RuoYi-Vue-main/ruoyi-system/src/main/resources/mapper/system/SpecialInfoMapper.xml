@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SpecialInfoMapper">
+    
+    <resultMap type="SpecialInfo" id="SpecialInfoResult">
+        <result property="id"    column="id"    />
+        <result property="examinee"    column="examinee"    />
+        <result property="examTime"    column="exam_time"    />
+        <result property="expireTime"    column="expire_time"    />
+        <result property="attachment"    column="attachment"    />
+    </resultMap>
+
+    <sql id="selectSpecialInfoVo">
+        select id, examinee, exam_time, expire_time, attachment from special_info
+    </sql>
+
+    <select id="selectSpecialInfoList" parameterType="SpecialInfo" resultMap="SpecialInfoResult">
+        <include refid="selectSpecialInfoVo"/>
+        <where>  
+            <if test="examinee != null  and examinee != ''"> and examinee = #{examinee}</if>
+        </where>
+    </select>
+    
+    <select id="selectSpecialInfoById" parameterType="Long" resultMap="SpecialInfoResult">
+        <include refid="selectSpecialInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSpecialInfo" parameterType="SpecialInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into special_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="examinee != null and examinee != ''">examinee,</if>
+            <if test="examTime != null">exam_time,</if>
+            <if test="expireTime != null">expire_time,</if>
+            <if test="attachment != null">attachment,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="examinee != null and examinee != ''">#{examinee},</if>
+            <if test="examTime != null">#{examTime},</if>
+            <if test="expireTime != null">#{expireTime},</if>
+            <if test="attachment != null">#{attachment},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSpecialInfo" parameterType="SpecialInfo">
+        update special_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="examinee != null and examinee != ''">examinee = #{examinee},</if>
+            <if test="examTime != null">exam_time = #{examTime},</if>
+            <if test="expireTime != null">expire_time = #{expireTime},</if>
+            <if test="attachment != null">attachment = #{attachment},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSpecialInfoById" parameterType="Long">
+        delete from special_info where id = #{id}
+    </delete>
+
+    <delete id="deleteSpecialInfoByIds" parameterType="String">
+        delete from special_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

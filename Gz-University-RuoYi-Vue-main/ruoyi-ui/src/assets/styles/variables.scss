@@ -1,0 +1,59 @@
+// base color
+$blue:#324157;
+$light-blue:#3A71A8;
+$red:#C03639;
+$pink: #E65D6E;
+$green: #30B08F;
+$tiffany: #4AB7BD;
+$yellow:#FEC171;
+$panGreen: #30B08F;
+
+// ==============================================
+// 默认菜单主题风格 (全白风格修改版)
+// ==============================================
+
+// 1. 字体颜色：深灰/黑
+$base-menu-color: rgba(0,0,0,.70);
+
+// 2. 选中高亮颜色：蓝色
+$base-menu-color-active: #409EFF;
+
+// 3. 一级菜单背景：白色
+$base-menu-background: #ffffff;
+
+// 4. Logo标题颜色
+$base-logo-title-color: #001529;
+
+$base-menu-light-color:rgba(0,0,0,.70);
+$base-menu-light-background:#ffffff;
+$base-logo-light-title-color: #001529;
+
+// ==============================================
+// 5. 【关键修改】子菜单背景：改成白色 (#ffffff)
+//    原来是 #1f2d3d，必须改掉，否则展开是黑的
+// ==============================================
+$base-sub-menu-background: #ffffff;
+
+// ==============================================
+// 6. 【关键修改】子菜单悬停背景：改成浅蓝 (#ecf5ff)
+//    原来是 #001528，必须改掉
+// ==============================================
+$base-sub-menu-hover: #ecf5ff;
+
+
+$base-sidebar-width: 260px;
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  menuColor: $base-menu-color;
+  menuLightColor: $base-menu-light-color;
+  menuColorActive: $base-menu-color-active;
+  menuBackground: $base-menu-background;
+  menuLightBackground: $base-menu-light-background;
+  subMenuBackground: $base-sub-menu-background;
+  subMenuHover: $base-sub-menu-hover;
+  sideBarWidth: $base-sidebar-width;
+  logoTitleColor: $base-logo-title-color;
+  logoLightTitleColor: $base-logo-light-title-color
+}

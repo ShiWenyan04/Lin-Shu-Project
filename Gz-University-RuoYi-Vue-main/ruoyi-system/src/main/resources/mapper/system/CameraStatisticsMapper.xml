@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CameraStatisticsMapper">
+    
+    <resultMap type="CameraStatistics" id="CameraStatisticsResult">
+        <result property="id"    column="id"    />
+        <result property="sequenceNo"    column="sequence_no"    />
+        <result property="area"    column="area"    />
+        <result property="storagePath"    column="storage_path"    />
+        <result property="fileNo"    column="file_no"    />
+        <result property="originalFileNo"    column="original_file_no"    />
+        <result property="fileFormat"    column="file_format"    />
+        <result property="folderNo"    column="folder_no"    />
+        <result property="cameraNo"    column="camera_no"    />
+        <result property="siteNo"    column="site_no"    />
+        <result property="photoDate"    column="photo_date"    />
+        <result property="photoTime"    column="photo_time"    />
+        <result property="workingDays"    column="working_days"    />
+        <result property="objectCategory"    column="object_category"    />
+        <result property="speciesName"    column="species_name"    />
+        <result property="animalCount"    column="animal_count"    />
+        <result property="gender"    column="gender"    />
+        <result property="firstPhoto"    column="first_photo"    />
+        <result property="validPhotos"    column="valid_photos"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectCameraStatisticsVo">
+        select id, sequence_no, area, storage_path, file_no, original_file_no, file_format, folder_no, camera_no, site_no, photo_date, photo_time, working_days, object_category, species_name, animal_count, gender, first_photo, valid_photos, temperature, remarks from camera_statistics
+    </sql>
+
+    <select id="selectCameraStatisticsList" parameterType="CameraStatistics" resultMap="CameraStatisticsResult">
+        <include refid="selectCameraStatisticsVo"/>
+        <where>  
+            <if test="area != null  and area != ''"> and area = #{area}</if>
+            <if test="objectCategory != null  and objectCategory != ''"> and object_category = #{objectCategory}</if>
+            <if test="speciesName != null  and speciesName != ''"> and species_name like concat('%', #{speciesName}, '%')</if>
+        </where>
+    </select>
+    <select id="selectCameraStatisticsByFileNo" parameterType="String" resultMap="CameraStatisticsResult">
+        <include refid="selectCameraStatisticsVo"/>
+        where file_no = #{fileNo}
+    </select>
+    
+    <select id="selectCameraStatisticsById" parameterType="Long" resultMap="CameraStatisticsResult">
+        <include refid="selectCameraStatisticsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCameraStatistics" parameterType="CameraStatistics" useGeneratedKeys="true" keyProperty="id">
+        insert into camera_statistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no,</if>
+            <if test="area != null and area != ''">area,</if>
+            <if test="storagePath != null">storage_path,</if>
+            <if test="fileNo != null and fileNo != ''">file_no,</if>
+            <if test="originalFileNo != null and originalFileNo != ''">original_file_no,</if>
+            <if test="fileFormat != null and fileFormat != ''">file_format,</if>
+            <if test="folderNo != null and folderNo != ''">folder_no,</if>
+            <if test="cameraNo != null and cameraNo != ''">camera_no,</if>
+            <if test="siteNo != null and siteNo != ''">site_no,</if>
+            <if test="photoDate != null">photo_date,</if>
+            <if test="photoTime != null">photo_time,</if>
+            <if test="workingDays != null">working_days,</if>
+            <if test="objectCategory != null">object_category,</if>
+            <if test="speciesName != null">species_name,</if>
+            <if test="animalCount != null">animal_count,</if>
+            <if test="gender != null">gender,</if>
+            <if test="firstPhoto != null">first_photo,</if>
+            <if test="validPhotos != null">valid_photos,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">#{sequenceNo},</if>
+            <if test="area != null and area != ''">#{area},</if>
+            <if test="storagePath != null">#{storagePath},</if>
+            <if test="fileNo != null and fileNo != ''">#{fileNo},</if>
+            <if test="originalFileNo != null and originalFileNo != ''">#{originalFileNo},</if>
+            <if test="fileFormat != null and fileFormat != ''">#{fileFormat},</if>
+            <if test="folderNo != null and folderNo != ''">#{folderNo},</if>
+            <if test="cameraNo != null and cameraNo != ''">#{cameraNo},</if>
+            <if test="siteNo != null and siteNo != ''">#{siteNo},</if>
+            <if test="photoDate != null">#{photoDate},</if>
+            <if test="photoTime != null">#{photoTime},</if>
+            <if test="workingDays != null">#{workingDays},</if>
+            <if test="objectCategory != null">#{objectCategory},</if>
+            <if test="speciesName != null">#{speciesName},</if>
+            <if test="animalCount != null">#{animalCount},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="firstPhoto != null">#{firstPhoto},</if>
+            <if test="validPhotos != null">#{validPhotos},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCameraStatistics" parameterType="CameraStatistics">
+        update camera_statistics
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no = #{sequenceNo},</if>
+            <if test="area != null and area != ''">area = #{area},</if>
+            <if test="storagePath != null">storage_path = #{storagePath},</if>
+            <if test="fileNo != null and fileNo != ''">file_no = #{fileNo},</if>
+            <if test="originalFileNo != null and originalFileNo != ''">original_file_no = #{originalFileNo},</if>
+            <if test="fileFormat != null and fileFormat != ''">file_format = #{fileFormat},</if>
+            <if test="folderNo != null and folderNo != ''">folder_no = #{folderNo},</if>
+            <if test="cameraNo != null and cameraNo != ''">camera_no = #{cameraNo},</if>
+            <if test="siteNo != null and siteNo != ''">site_no = #{siteNo},</if>
+            <if test="photoDate != null">photo_date = #{photoDate},</if>
+            <if test="photoTime != null">photo_time = #{photoTime},</if>
+            <if test="workingDays != null">working_days = #{workingDays},</if>
+            <if test="objectCategory != null">object_category = #{objectCategory},</if>
+            <if test="speciesName != null">species_name = #{speciesName},</if>
+            <if test="animalCount != null">animal_count = #{animalCount},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="firstPhoto != null">first_photo = #{firstPhoto},</if>
+            <if test="validPhotos != null">valid_photos = #{validPhotos},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCameraStatisticsById" parameterType="Long">
+        delete from camera_statistics where id = #{id}
+    </delete>
+
+    <delete id="deleteCameraStatisticsByIds" parameterType="String">
+        delete from camera_statistics where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

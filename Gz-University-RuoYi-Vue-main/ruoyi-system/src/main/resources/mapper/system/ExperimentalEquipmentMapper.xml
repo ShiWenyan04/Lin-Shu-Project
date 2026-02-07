@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ExperimentalEquipmentMapper">
+    
+    <resultMap type="ExperimentalEquipment" id="ExperimentalEquipmentResult">
+        <result property="id"    column="id"    />
+        <result property="deviceName"    column="device_name"    />
+        <result property="model"    column="model"    />
+        <result property="assetNo"    column="asset_no"    />
+        <result property="location"    column="location"    />
+        <result property="purchaseTime"    column="purchase_time"    />
+        <result property="equipmentStatus"    column="equipment_status"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectExperimentalEquipmentVo">
+        select id, device_name, model, asset_no, location, purchase_time, equipment_status, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from experimental_equipment
+    </sql>
+
+    <select id="selectExperimentalEquipmentList" parameterType="ExperimentalEquipment" resultMap="ExperimentalEquipmentResult">
+        <include refid="selectExperimentalEquipmentVo"/>
+        <where>  
+            <if test="deviceName != null  and deviceName != ''"> and device_name like concat('%', #{deviceName}, '%')</if>
+            <if test="equipmentStatus != null  and equipmentStatus != ''"> and equipment_status = #{equipmentStatus}</if>
+            <if test="auditStatus != null and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectExperimentalEquipmentById" parameterType="Long" resultMap="ExperimentalEquipmentResult">
+        <include refid="selectExperimentalEquipmentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertExperimentalEquipment" parameterType="ExperimentalEquipment" useGeneratedKeys="true" keyProperty="id">
+        insert into experimental_equipment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deviceName != null">device_name,</if>
+            <if test="model != null">model,</if>
+            <if test="assetNo != null">asset_no,</if>
+            <if test="location != null">location,</if>
+            <if test="purchaseTime != null">purchase_time,</if>
+            <if test="equipmentStatus != null">equipment_status,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deviceName != null">#{deviceName},</if>
+            <if test="model != null">#{model},</if>
+            <if test="assetNo != null">#{assetNo},</if>
+            <if test="location != null">#{location},</if>
+            <if test="purchaseTime != null">#{purchaseTime},</if>
+            <if test="equipmentStatus != null">#{equipmentStatus},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExperimentalEquipment" parameterType="ExperimentalEquipment">
+        update experimental_equipment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceName != null">device_name = #{deviceName},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="assetNo != null">asset_no = #{assetNo},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="purchaseTime != null">purchase_time = #{purchaseTime},</if>
+            <if test="equipmentStatus != null">equipment_status = #{equipmentStatus},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExperimentalEquipmentById" parameterType="Long">
+        delete from experimental_equipment where id = #{id}
+    </delete>
+
+    <delete id="deleteExperimentalEquipmentByIds" parameterType="String">
+        delete from experimental_equipment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

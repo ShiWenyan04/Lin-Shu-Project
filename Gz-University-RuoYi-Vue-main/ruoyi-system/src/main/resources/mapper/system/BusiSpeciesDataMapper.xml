@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiSpeciesDataMapper">
+    
+    <resultMap type="BusiSpeciesData" id="BusiSpeciesDataResult">
+        <result property="id"    column="id"    />
+        <result property="installId"    column="install_id"    />
+        <result property="pointId"    column="point_id"    />
+        <result property="siteCodeRef"    column="site_code_ref"    />
+        <result property="speciesName"    column="species_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="captureCount"    column="capture_count"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBusiSpeciesDataVo">
+        select id, install_id, point_id, site_code_ref, species_name, class_name, capture_count, create_time from busi_species_data
+    </sql>
+
+    <select id="selectBusiSpeciesDataList" parameterType="BusiSpeciesData" resultMap="BusiSpeciesDataResult">
+        <include refid="selectBusiSpeciesDataVo"/>
+        <where>  
+            <if test="installId != null "> and install_id = #{installId}</if>
+            <if test="pointId != null "> and point_id = #{pointId}</if>
+            <if test="siteCodeRef != null  and siteCodeRef != ''"> and site_code_ref = #{siteCodeRef}</if>
+            <if test="speciesName != null  and speciesName != ''"> and species_name like concat('%', #{speciesName}, '%')</if>
+            <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
+            <if test="captureCount != null "> and capture_count = #{captureCount}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiSpeciesDataById" parameterType="Long" resultMap="BusiSpeciesDataResult">
+        <include refid="selectBusiSpeciesDataVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBusiSpeciesData" parameterType="BusiSpeciesData" useGeneratedKeys="true" keyProperty="id">
+        insert into busi_species_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="installId != null">install_id,</if>
+            <if test="pointId != null">point_id,</if>
+            <if test="siteCodeRef != null">site_code_ref,</if>
+            <if test="speciesName != null">species_name,</if>
+            <if test="className != null">class_name,</if>
+            <if test="captureCount != null">capture_count,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="installId != null">#{installId},</if>
+            <if test="pointId != null">#{pointId},</if>
+            <if test="siteCodeRef != null">#{siteCodeRef},</if>
+            <if test="speciesName != null">#{speciesName},</if>
+            <if test="className != null">#{className},</if>
+            <if test="captureCount != null">#{captureCount},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiSpeciesData" parameterType="BusiSpeciesData">
+        update busi_species_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="installId != null">install_id = #{installId},</if>
+            <if test="pointId != null">point_id = #{pointId},</if>
+            <if test="siteCodeRef != null">site_code_ref = #{siteCodeRef},</if>
+            <if test="speciesName != null">species_name = #{speciesName},</if>
+            <if test="className != null">class_name = #{className},</if>
+            <if test="captureCount != null">capture_count = #{captureCount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBusiSpeciesDataById" parameterType="Long">
+        delete from busi_species_data where id = #{id}
+    </delete>
+
+    <delete id="deleteBusiSpeciesDataByIds" parameterType="String">
+        delete from busi_species_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

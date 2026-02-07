@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.system.RyThesisMapper">
+
+    <resultMap type="RyThesis" id="RyThesisResult">
+        <result property="id"    column="id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="externalSupervisor"    column="external_supervisor"    />
+        <result property="degreeType"    column="degree_type"    />
+        <result property="graduationYear"    column="graduation_year"    />
+        <result property="thesisTitle"    column="thesis_title"    />
+        <result property="researchSubject"    column="research_subject"    />
+        <result property="researchLocation"    column="research_location"    />
+        <result property="publicationInfo"    column="publication_info"    />
+        <result property="researchField"    column="research_field"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditOpinion"    column="audit_opinion"    />
+        <result property="auditorId"    column="auditor_id"    />
+        <result property="auditTime"    column="audit_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectRyThesisVo">
+        select id, student_name, external_supervisor, degree_type, graduation_year, thesis_title, research_subject, research_location, publication_info, research_field, audit_status, audit_opinion, auditor_id, audit_time, create_by, create_time, update_by, update_time, remark from ry_thesis
+    </sql>
+
+    <select id="selectRyThesisList" parameterType="RyThesis" resultMap="RyThesisResult">
+        <include refid="selectRyThesisVo"/>
+        <where>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="externalSupervisor != null  and externalSupervisor != ''"> and external_supervisor = #{externalSupervisor}</if>
+            <if test="degreeType != null  and degreeType != ''"> and degree_type = #{degreeType}</if>
+            <if test="graduationYear != null  and graduationYear != ''"> and graduation_year = #{graduationYear}</if>
+            <if test="thesisTitle != null  and thesisTitle != ''"> and thesis_title = #{thesisTitle}</if>
+            <if test="researchSubject != null  and researchSubject != ''"> and research_subject = #{researchSubject}</if>
+            <if test="researchLocation != null  and researchLocation != ''"> and research_location = #{researchLocation}</if>
+            <if test="publicationInfo != null  and publicationInfo != ''"> and publication_info = #{publicationInfo}</if>
+            <if test="researchField != null  and researchField != ''"> and research_field = #{researchField}</if>
+
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+
+            <if test="auditStatus != null and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+
+            <if test="params.queryMode == 'public'"> and audit_status = '1'</if>
+
+            <if test="params.queryMode == 'audit'"> and audit_status = '0'</if>
+        </where>
+    </select>
+
+    <select id="selectRyThesisById" parameterType="Long" resultMap="RyThesisResult">
+        <include refid="selectRyThesisVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertRyThesis" parameterType="RyThesis" useGeneratedKeys="true" keyProperty="id">
+        insert into ry_thesis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="externalSupervisor != null">external_supervisor,</if>
+            <if test="degreeType != null">degree_type,</if>
+            <if test="graduationYear != null">graduation_year,</if>
+            <if test="thesisTitle != null">thesis_title,</if>
+            <if test="researchSubject != null">research_subject,</if>
+            <if test="researchLocation != null">research_location,</if>
+            <if test="publicationInfo != null">publication_info,</if>
+            <if test="researchField != null">research_field,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditOpinion != null">audit_opinion,</if>
+            <if test="auditorId != null">auditor_id,</if>
+            <if test="auditTime != null">audit_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="externalSupervisor != null">#{externalSupervisor},</if>
+            <if test="degreeType != null">#{degreeType},</if>
+            <if test="graduationYear != null">#{graduationYear},</if>
+            <if test="thesisTitle != null">#{thesisTitle},</if>
+            <if test="researchSubject != null">#{researchSubject},</if>
+            <if test="researchLocation != null">#{researchLocation},</if>
+            <if test="publicationInfo != null">#{publicationInfo},</if>
+            <if test="researchField != null">#{researchField},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditOpinion != null">#{auditOpinion},</if>
+            <if test="auditorId != null">#{auditorId},</if>
+            <if test="auditTime != null">#{auditTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateRyThesis" parameterType="RyThesis">
+        update ry_thesis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="externalSupervisor != null">external_supervisor = #{externalSupervisor},</if>
+            <if test="degreeType != null">degree_type = #{degreeType},</if>
+            <if test="graduationYear != null">graduation_year = #{graduationYear},</if>
+            <if test="thesisTitle != null">thesis_title = #{thesisTitle},</if>
+            <if test="researchSubject != null">research_subject = #{researchSubject},</if>
+            <if test="researchLocation != null">research_location = #{researchLocation},</if>
+            <if test="publicationInfo != null">publication_info = #{publicationInfo},</if>
+            <if test="researchField != null">research_field = #{researchField},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditOpinion != null">audit_opinion = #{auditOpinion},</if>
+            <if test="auditorId != null">auditor_id = #{auditorId},</if>
+            <if test="auditTime != null">audit_time = #{auditTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRyThesisById" parameterType="Long">
+        delete from ry_thesis where id = #{id}
+    </delete>
+
+    <delete id="deleteRyThesisByIds" parameterType="String">
+        delete from ry_thesis where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

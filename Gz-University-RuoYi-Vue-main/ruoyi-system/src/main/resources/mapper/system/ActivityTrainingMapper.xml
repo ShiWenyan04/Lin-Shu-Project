@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ActivityTrainingMapper">
+    
+    <resultMap type="ActivityTraining" id="ActivityTrainingResult">
+        <result property="id"    column="id"    />
+        <result property="activityTime"    column="activity_time"    />
+        <result property="activityType"    column="activity_type"    />
+        <result property="activityContent"    column="activity_content"    />
+        <result property="leaderName"    column="leader_name"    />
+        <result property="participants"    column="participants"    />
+        <result property="materials"    column="materials"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectActivityTrainingVo">
+        select id, activity_time, activity_type, activity_content, leader_name, participants, materials, create_by, create_time, update_by, update_time, remark from activity_training
+    </sql>
+
+    <select id="selectActivityTrainingList" parameterType="ActivityTraining" resultMap="ActivityTrainingResult">
+        <include refid="selectActivityTrainingVo"/>
+        <where>  
+            <if test="activityType != null  and activityType != ''"> and activity_type = #{activityType}</if>
+            <if test="activityContent != null  and activityContent != ''"> and activity_content = #{activityContent}</if>
+            <if test="leaderName != null  and leaderName != ''"> and leader_name like concat('%', #{leaderName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectActivityTrainingById" parameterType="Long" resultMap="ActivityTrainingResult">
+        <include refid="selectActivityTrainingVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertActivityTraining" parameterType="ActivityTraining" useGeneratedKeys="true" keyProperty="id">
+        insert into activity_training
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="activityTime != null">activity_time,</if>
+            <if test="activityType != null and activityType != ''">activity_type,</if>
+            <if test="activityContent != null and activityContent != ''">activity_content,</if>
+            <if test="leaderName != null and leaderName != ''">leader_name,</if>
+            <if test="participants != null">participants,</if>
+            <if test="materials != null">materials,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="activityTime != null">#{activityTime},</if>
+            <if test="activityType != null and activityType != ''">#{activityType},</if>
+            <if test="activityContent != null and activityContent != ''">#{activityContent},</if>
+            <if test="leaderName != null and leaderName != ''">#{leaderName},</if>
+            <if test="participants != null">#{participants},</if>
+            <if test="materials != null">#{materials},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateActivityTraining" parameterType="ActivityTraining">
+        update activity_training
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="activityTime != null">activity_time = #{activityTime},</if>
+            <if test="activityType != null and activityType != ''">activity_type = #{activityType},</if>
+            <if test="activityContent != null and activityContent != ''">activity_content = #{activityContent},</if>
+            <if test="leaderName != null and leaderName != ''">leader_name = #{leaderName},</if>
+            <if test="participants != null">participants = #{participants},</if>
+            <if test="materials != null">materials = #{materials},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteActivityTrainingById" parameterType="Long">
+        delete from activity_training where id = #{id}
+    </delete>
+
+    <delete id="deleteActivityTrainingByIds" parameterType="String">
+        delete from activity_training where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

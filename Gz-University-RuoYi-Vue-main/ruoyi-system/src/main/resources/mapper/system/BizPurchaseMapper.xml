@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BizPurchaseMapper">
+    
+    <resultMap type="BizPurchase" id="BizPurchaseResult">
+        <result property="id"    column="id"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="itemType"    column="item_type"    />
+        <result property="model"    column="model"    />
+        <result property="purchaser"    column="purchaser"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="price"    column="price"    />
+        <result property="usagePurpose"    column="usage_purpose"    />
+        <result property="invoiceUrl"    column="invoice_url"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBizPurchaseVo">
+        select id, item_name, item_type, model, purchaser, company_name, quantity, price, usage_purpose, invoice_url, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from biz_purchase
+    </sql>
+
+    <select id="selectBizPurchaseList" parameterType="BizPurchase" resultMap="BizPurchaseResult">
+        <include refid="selectBizPurchaseVo"/>
+        <where>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="purchaser != null  and purchaser != ''"> and purchaser = #{purchaser}</if>
+
+            <if test="auditStatus != null  and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizPurchaseById" parameterType="Long" resultMap="BizPurchaseResult">
+        <include refid="selectBizPurchaseVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBizPurchase" parameterType="BizPurchase" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_purchase
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemName != null">item_name,</if>
+            <if test="itemType != null">item_type,</if>
+            <if test="model != null">model,</if>
+            <if test="purchaser != null">purchaser,</if>
+            <if test="companyName != null">company_name,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="price != null">price,</if>
+            <if test="usagePurpose != null">usage_purpose,</if>
+            <if test="invoiceUrl != null">invoice_url,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemName != null">#{itemName},</if>
+            <if test="itemType != null">#{itemType},</if>
+            <if test="model != null">#{model},</if>
+            <if test="purchaser != null">#{purchaser},</if>
+            <if test="companyName != null">#{companyName},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="price != null">#{price},</if>
+            <if test="usagePurpose != null">#{usagePurpose},</if>
+            <if test="invoiceUrl != null">#{invoiceUrl},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizPurchase" parameterType="BizPurchase">
+        update biz_purchase
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemName != null">item_name = #{itemName},</if>
+            <if test="itemType != null">item_type = #{itemType},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="purchaser != null">purchaser = #{purchaser},</if>
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="usagePurpose != null">usage_purpose = #{usagePurpose},</if>
+            <if test="invoiceUrl != null">invoice_url = #{invoiceUrl},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizPurchaseById" parameterType="Long">
+        delete from biz_purchase where id = #{id}
+    </delete>
+
+    <delete id="deleteBizPurchaseByIds" parameterType="String">
+        delete from biz_purchase where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

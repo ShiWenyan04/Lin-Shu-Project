@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiCameraResultMapper">
+    
+    <resultMap type="BusiCameraResult" id="BusiCameraResultResult">
+        <result property="id"    column="id"    />
+        <result property="regionName"    column="region_name"    />
+        <result property="periodStart"    column="period_start"    />
+        <result property="periodEnd"    column="period_end"    />
+        <result property="relatedIds"    column="related_ids"    />
+        <result property="monitorPlanFile"    column="monitor_plan_file"    />
+        <result property="interimRptFile"    column="interim_rpt_file"    />
+        <result property="finalRptFile"    column="final_rpt_file"    />
+        <result property="pptFile"    column="ppt_file"    />
+        <result property="writerName"    column="writer_name"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBusiCameraResultVo">
+        select id, region_name, period_start, period_end, related_ids, monitor_plan_file, interim_rpt_file, final_rpt_file, ppt_file, writer_name, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from busi_camera_result
+    </sql>
+
+    <select id="selectBusiCameraResultList" parameterType="BusiCameraResult" resultMap="BusiCameraResultResult">
+        <include refid="selectBusiCameraResultVo"/>
+        <where>
+            <if test="regionName != null  and regionName != ''"> and region_name like concat('%', #{regionName}, '%')</if>
+            <if test="writerName != null  and writerName != ''"> and writer_name like concat('%', #{writerName}, '%')</if>
+            <if test="auditStatus != null  and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiCameraResultById" parameterType="Long" resultMap="BusiCameraResultResult">
+        <include refid="selectBusiCameraResultVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBusiCameraResult" parameterType="BusiCameraResult" useGeneratedKeys="true" keyProperty="id">
+        insert into busi_camera_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="regionName != null and regionName != ''">region_name,</if>
+            <if test="periodStart != null">period_start,</if>
+            <if test="periodEnd != null">period_end,</if>
+            <if test="relatedIds != null">related_ids,</if>
+            <if test="monitorPlanFile != null">monitor_plan_file,</if>
+            <if test="interimRptFile != null">interim_rpt_file,</if>
+            <if test="finalRptFile != null">final_rpt_file,</if>
+            <if test="pptFile != null">ppt_file,</if>
+            <if test="writerName != null">writer_name,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="regionName != null and regionName != ''">#{regionName},</if>
+            <if test="periodStart != null">#{periodStart},</if>
+            <if test="periodEnd != null">#{periodEnd},</if>
+            <if test="relatedIds != null">#{relatedIds},</if>
+            <if test="monitorPlanFile != null">#{monitorPlanFile},</if>
+            <if test="interimRptFile != null">#{interimRptFile},</if>
+            <if test="finalRptFile != null">#{finalRptFile},</if>
+            <if test="pptFile != null">#{pptFile},</if>
+            <if test="writerName != null">#{writerName},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiCameraResult" parameterType="BusiCameraResult">
+        update busi_camera_result
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="regionName != null and regionName != ''">region_name = #{regionName},</if>
+            <if test="periodStart != null">period_start = #{periodStart},</if>
+            <if test="periodEnd != null">period_end = #{periodEnd},</if>
+            <if test="relatedIds != null">related_ids = #{relatedIds},</if>
+            <if test="monitorPlanFile != null">monitor_plan_file = #{monitorPlanFile},</if>
+            <if test="interimRptFile != null">interim_rpt_file = #{interimRptFile},</if>
+            <if test="finalRptFile != null">final_rpt_file = #{finalRptFile},</if>
+            <if test="pptFile != null">ppt_file = #{pptFile},</if>
+            <if test="writerName != null">writer_name = #{writerName},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBusiCameraResultById" parameterType="Long">
+        delete from busi_camera_result where id = #{id}
+    </delete>
+
+    <delete id="deleteBusiCameraResultByIds" parameterType="String">
+        delete from busi_camera_result where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

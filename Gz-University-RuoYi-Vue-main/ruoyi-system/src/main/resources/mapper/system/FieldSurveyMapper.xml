@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FieldSurveyMapper">
+    
+    <resultMap type="FieldSurvey" id="FieldSurveyResult">
+        <result property="id"    column="id"    />
+        <result property="equipmentName"    column="equipment_name"    />
+        <result property="model"    column="model"    />
+        <result property="price"    column="price"    />
+        <result property="vendor"    column="vendor"    />
+        <result property="purchaseTime"    column="purchase_time"    />
+        <result property="totalQty"    column="total_qty"    />
+        <result property="availableQty"    column="available_qty"    />
+        <result property="borrowedQty"    column="borrowed_qty"    />
+        <result property="installedQty"    column="installed_qty"    />
+        <result property="scrappedQty"    column="scrapped_qty"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectFieldSurveyVo">
+        select id, equipment_name, model, price, vendor, purchase_time, total_qty, available_qty, borrowed_qty, installed_qty, scrapped_qty, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from field_survey
+    </sql>
+
+    <select id="selectFieldSurveyList" parameterType="FieldSurvey" resultMap="FieldSurveyResult">
+        <include refid="selectFieldSurveyVo"/>
+        <where>
+            <if test="equipmentName != null  and equipmentName != ''"> and equipment_name like concat('%', #{equipmentName}, '%')</if>
+
+            <if test="auditStatus != null and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+            <if test="params.queryMode == 'public'">
+                AND audit_status = '1'
+            </if>
+
+            <if test="params.queryMode == 'private'">
+                AND create_by = #{createBy}
+            </if>
+
+            <if test="params.queryMode == 'audit'">
+                AND audit_status != '1'
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectFieldSurveyById" parameterType="Long" resultMap="FieldSurveyResult">
+        <include refid="selectFieldSurveyVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertFieldSurvey" parameterType="FieldSurvey" useGeneratedKeys="true" keyProperty="id">
+        insert into field_survey
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="equipmentName != null and equipmentName != ''">equipment_name,</if>
+            <if test="model != null">model,</if>
+            <if test="price != null">price,</if>
+            <if test="vendor != null">vendor,</if>
+            <if test="purchaseTime != null">purchase_time,</if>
+            <if test="totalQty != null">total_qty,</if>
+            <if test="availableQty != null">available_qty,</if>
+            <if test="borrowedQty != null">borrowed_qty,</if>
+            <if test="installedQty != null">installed_qty,</if>
+            <if test="scrappedQty != null">scrapped_qty,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="equipmentName != null and equipmentName != ''">#{equipmentName},</if>
+            <if test="model != null">#{model},</if>
+            <if test="price != null">#{price},</if>
+            <if test="vendor != null">#{vendor},</if>
+            <if test="purchaseTime != null">#{purchaseTime},</if>
+            <if test="totalQty != null">#{totalQty},</if>
+            <if test="availableQty != null">#{availableQty},</if>
+            <if test="borrowedQty != null">#{borrowedQty},</if>
+            <if test="installedQty != null">#{installedQty},</if>
+            <if test="scrappedQty != null">#{scrappedQty},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFieldSurvey" parameterType="FieldSurvey">
+        update field_survey
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="equipmentName != null and equipmentName != ''">equipment_name = #{equipmentName},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="vendor != null">vendor = #{vendor},</if>
+            <if test="purchaseTime != null">purchase_time = #{purchaseTime},</if>
+            <if test="totalQty != null">total_qty = #{totalQty},</if>
+            <if test="availableQty != null">available_qty = #{availableQty},</if>
+            <if test="borrowedQty != null">borrowed_qty = #{borrowedQty},</if>
+            <if test="installedQty != null">installed_qty = #{installedQty},</if>
+            <if test="scrappedQty != null">scrapped_qty = #{scrappedQty},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFieldSurveyById" parameterType="Long">
+        delete from field_survey where id = #{id}
+    </delete>
+
+    <delete id="deleteFieldSurveyByIds" parameterType="String">
+        delete from field_survey where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

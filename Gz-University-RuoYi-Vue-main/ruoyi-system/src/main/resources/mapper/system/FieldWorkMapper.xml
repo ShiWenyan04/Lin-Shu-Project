@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FieldWorkMapper">
+    
+    <resultMap type="FieldWork" id="FieldWorkResult">
+        <result property="id"    column="id"    />
+        <result property="sequenceNo"    column="sequence_no"    />
+        <result property="statMonth"    column="stat_month"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="location"    column="location"    />
+        <result property="content"    column="content"    />
+        <result property="leader"    column="leader"    />
+        <result property="participants"    column="participants"    />
+        <result property="fieldDays"    column="field_days"    />
+        <result property="totalDays"    column="total_days"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectFieldWorkVo">
+        select id, sequence_no, stat_month, start_date, end_date, location, content, leader, participants, field_days, total_days, remarks from field_work
+    </sql>
+
+    <select id="selectFieldWorkList" parameterType="FieldWork" resultMap="FieldWorkResult">
+        <include refid="selectFieldWorkVo"/>
+        <where>  
+            <if test="leader != null  and leader != ''"> and leader = #{leader}</if>
+        </where>
+    </select>
+    
+    <select id="selectFieldWorkById" parameterType="Long" resultMap="FieldWorkResult">
+        <include refid="selectFieldWorkVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertFieldWork" parameterType="FieldWork" useGeneratedKeys="true" keyProperty="id">
+        insert into field_work
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no,</if>
+            <if test="statMonth != null and statMonth != ''">stat_month,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="location != null and location != ''">location,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="leader != null and leader != ''">leader,</if>
+            <if test="participants != null and participants != ''">participants,</if>
+            <if test="fieldDays != null">field_days,</if>
+            <if test="totalDays != null">total_days,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">#{sequenceNo},</if>
+            <if test="statMonth != null and statMonth != ''">#{statMonth},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="leader != null and leader != ''">#{leader},</if>
+            <if test="participants != null and participants != ''">#{participants},</if>
+            <if test="fieldDays != null">#{fieldDays},</if>
+            <if test="totalDays != null">#{totalDays},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFieldWork" parameterType="FieldWork">
+        update field_work
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no = #{sequenceNo},</if>
+            <if test="statMonth != null and statMonth != ''">stat_month = #{statMonth},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="leader != null and leader != ''">leader = #{leader},</if>
+            <if test="participants != null and participants != ''">participants = #{participants},</if>
+            <if test="fieldDays != null">field_days = #{fieldDays},</if>
+            <if test="totalDays != null">total_days = #{totalDays},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFieldWorkById" parameterType="Long">
+        delete from field_work where id = #{id}
+    </delete>
+
+    <delete id="deleteFieldWorkByIds" parameterType="String">
+        delete from field_work where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

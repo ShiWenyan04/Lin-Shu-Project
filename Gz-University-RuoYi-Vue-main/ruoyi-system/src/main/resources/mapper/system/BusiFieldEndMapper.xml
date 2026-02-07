@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiFieldEndMapper">
+
+    <resultMap type="BusiFieldEnd" id="BusiFieldEndResult">
+        <result property="endId"    column="end_id"    />
+        <result property="startId"    column="start_id"    />
+        <result property="leaderName"    column="leader_name"    />
+        <result property="summaryFile"    column="summary_file"    />
+        <result property="taskResult"    column="task_result"    />
+        <result property="actStartDate"    column="act_start_date"    />
+        <result property="actEndDate"    column="act_end_date"    />
+        <result property="actDays"    column="act_days"    />
+        <result property="isReimburse"    column="is_reimburse"    />
+        <result property="isInvoice"    column="is_invoice"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+
+        <result property="archiveCount" column="archive_count" />
+    </resultMap>
+
+    <sql id="selectBusiFieldEndVo">
+        select end_id, start_id, leader_name, summary_file, task_result, act_start_date, act_end_date, act_days, is_reimburse, is_invoice, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from busi_field_end
+    </sql>
+
+    <select id="selectBusiFieldEndList" parameterType="BusiFieldEnd" resultMap="BusiFieldEndResult">
+        select
+        end_id, start_id, leader_name, summary_file, task_result, act_start_date, act_end_date, act_days, is_reimburse, is_invoice, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark,
+
+        (select count(1) from busi_field_archive a where a.start_id = busi_field_end.start_id) as archive_count
+
+        from busi_field_end
+        <where>
+            <if test="leaderName != null  and leaderName != ''">
+                and leader_name like concat('%', #{leaderName}, '%')
+            </if>
+
+            <if test="auditStatus != null  and auditStatus != ''">
+                and audit_status = #{auditStatus}
+            </if>
+
+            <if test="projectName != null and projectName != ''">
+                AND start_id IN (
+                SELECT s.start_id
+                FROM busi_field_start s
+                LEFT JOIN busi_project p ON s.project_id = p.project_id
+                WHERE p.project_name LIKE concat('%', #{projectName}, '%')
+                )
+            </if>
+
+            <if test="params.dataScope != null and params.dataScope != ''">
+                ${params.dataScope}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBusiFieldEndByEndId" parameterType="Long" resultMap="BusiFieldEndResult">
+        <include refid="selectBusiFieldEndVo"/>
+        where end_id = #{endId}
+    </select>
+
+    <insert id="insertBusiFieldEnd" parameterType="BusiFieldEnd" useGeneratedKeys="true" keyProperty="endId">
+        insert into busi_field_end
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="startId != null">start_id,</if>
+            <if test="leaderName != null">leader_name,</if>
+            <if test="summaryFile != null">summary_file,</if>
+            <if test="taskResult != null">task_result,</if>
+            <if test="actStartDate != null">act_start_date,</if>
+            <if test="actEndDate != null">act_end_date,</if>
+            <if test="actDays != null">act_days,</if>
+            <if test="isReimburse != null">is_reimburse,</if>
+            <if test="isInvoice != null">is_invoice,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="startId != null">#{startId},</if>
+            <if test="leaderName != null">#{leaderName},</if>
+            <if test="summaryFile != null">#{summaryFile},</if>
+            <if test="taskResult != null">#{taskResult},</if>
+            <if test="actStartDate != null">#{actStartDate},</if>
+            <if test="actEndDate != null">#{actEndDate},</if>
+            <if test="actDays != null">#{actDays},</if>
+            <if test="isReimburse != null">#{isReimburse},</if>
+            <if test="isInvoice != null">#{isInvoice},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBusiFieldEnd" parameterType="BusiFieldEnd">
+        update busi_field_end
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startId != null">start_id = #{startId},</if>
+            <if test="leaderName != null">leader_name = #{leaderName},</if>
+            <if test="summaryFile != null">summary_file = #{summaryFile},</if>
+            <if test="taskResult != null">task_result = #{taskResult},</if>
+            <if test="actStartDate != null">act_start_date = #{actStartDate},</if>
+            <if test="actEndDate != null">act_end_date = #{actEndDate},</if>
+            <if test="actDays != null">act_days = #{actDays},</if>
+            <if test="isReimburse != null">is_reimburse = #{isReimburse},</if>
+            <if test="isInvoice != null">is_invoice = #{isInvoice},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where end_id = #{endId}
+    </update>
+
+    <delete id="deleteBusiFieldEndByEndId" parameterType="Long">
+        delete from busi_field_end where end_id = #{endId}
+    </delete>
+
+    <delete id="deleteBusiFieldEndByEndIds" parameterType="String">
+        delete from busi_field_end where end_id in
+        <foreach item="endId" collection="array" open="(" separator="," close=")">
+            #{endId}
+        </foreach>
+    </delete>
+</mapper>

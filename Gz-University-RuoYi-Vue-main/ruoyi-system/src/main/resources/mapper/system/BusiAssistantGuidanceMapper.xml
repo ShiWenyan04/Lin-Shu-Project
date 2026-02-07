@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiAssistantGuidanceMapper">
+
+    <resultMap type="BusiAssistantGuidance" id="BusiAssistantGuidanceResult">
+        <result property="id"    column="id"    />
+        <result property="grade"    column="grade"    />
+        <result property="className"    column="class_name"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="supervisor"    column="supervisor"    />
+        <result property="thesisTitle"    column="thesis_title"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="proposalDate"    column="proposal_date"    />
+        <result property="defenseDate"    column="defense_date"    />
+        <result property="defenseResult"    column="defense_result"    />
+        <result property="hasFee"    column="has_fee"    />
+        <result property="evaluationFile"    column="evaluation_file"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditReason"    column="audit_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBusiAssistantGuidanceVo">
+        select id, grade, class_name, student_name, student_id, supervisor, thesis_title, project_name, proposal_date, defense_date, defense_result, has_fee, evaluation_file, audit_status, audit_reason, create_by, create_time, update_by, update_time, remark from busi_assistant_guidance
+    </sql>
+
+    <select id="selectBusiAssistantGuidanceList" parameterType="BusiAssistantGuidance" resultMap="BusiAssistantGuidanceResult">
+        <include refid="selectBusiAssistantGuidanceVo"/>
+        <where>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="supervisor != null  and supervisor != ''"> and supervisor like concat('%', #{supervisor}, '%')</if>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="thesisTitle != null  and thesisTitle != ''"> and thesis_title like concat('%', #{thesisTitle}, '%')</if>
+
+            <if test="auditStatus != null  and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+
+            <if test="params.dataScope != null and params.dataScope != ''">
+                ${params.dataScope}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBusiAssistantGuidanceById" parameterType="Long" resultMap="BusiAssistantGuidanceResult">
+        <include refid="selectBusiAssistantGuidanceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBusiAssistantGuidance" parameterType="BusiAssistantGuidance" useGeneratedKeys="true" keyProperty="id">
+        insert into busi_assistant_guidance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="grade != null">grade,</if>
+            <if test="className != null">class_name,</if>
+            <if test="studentName != null">student_name,</if>
+            <if test="studentId != null">student_id,</if>
+            <if test="supervisor != null">supervisor,</if>
+            <if test="thesisTitle != null">thesis_title,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="proposalDate != null">proposal_date,</if>
+            <if test="defenseDate != null">defense_date,</if>
+            <if test="defenseResult != null">defense_result,</if>
+            <if test="hasFee != null">has_fee,</if>
+            <if test="evaluationFile != null">evaluation_file,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditReason != null">audit_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="grade != null">#{grade},</if>
+            <if test="className != null">#{className},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="studentId != null">#{studentId},</if>
+            <if test="supervisor != null">#{supervisor},</if>
+            <if test="thesisTitle != null">#{thesisTitle},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="proposalDate != null">#{proposalDate},</if>
+            <if test="defenseDate != null">#{defenseDate},</if>
+            <if test="defenseResult != null">#{defenseResult},</if>
+            <if test="hasFee != null">#{hasFee},</if>
+            <if test="evaluationFile != null">#{evaluationFile},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditReason != null">#{auditReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBusiAssistantGuidance" parameterType="BusiAssistantGuidance">
+        update busi_assistant_guidance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="className != null">class_name = #{className},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="supervisor != null">supervisor = #{supervisor},</if>
+            <if test="thesisTitle != null">thesis_title = #{thesisTitle},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="proposalDate != null">proposal_date = #{proposalDate},</if>
+            <if test="defenseDate != null">defense_date = #{defenseDate},</if>
+            <if test="defenseResult != null">defense_result = #{defenseResult},</if>
+            <if test="hasFee != null">has_fee = #{hasFee},</if>
+            <if test="evaluationFile != null">evaluation_file = #{evaluationFile},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditReason != null">audit_reason = #{auditReason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBusiAssistantGuidanceById" parameterType="Long">
+        delete from busi_assistant_guidance where id = #{id}
+    </delete>
+
+    <delete id="deleteBusiAssistantGuidanceByIds" parameterType="String">
+        delete from busi_assistant_guidance where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

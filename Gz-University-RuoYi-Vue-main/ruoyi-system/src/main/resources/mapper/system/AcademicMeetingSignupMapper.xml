@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AcademicMeetingSignupMapper">
+
+    <resultMap type="com.ruoyi.system.domain.AcademicMeetingSignup" id="AcademicMeetingSignupResult">
+        <result property="id" column="id"/>
+        <result property="meetingId" column="meeting_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="signupTime" column="signup_time"/>
+    </resultMap>
+
+    <sql id="selectSignupVo">
+        select id, meeting_id, user_id, name, phone, signup_time from academic_meeting_signup
+    </sql>
+
+    <select id="selectSignupListByMeetingId" parameterType="Long" resultMap="AcademicMeetingSignupResult">
+        <include refid="selectSignupVo"/>
+        where meeting_id = #{meetingId}
+        order by signup_time desc
+    </select>
+
+    <insert id="insertSignup" parameterType="com.ruoyi.system.domain.AcademicMeetingSignup" useGeneratedKeys="true" keyProperty="id">
+        insert into academic_meeting_signup (meeting_id, user_id, name, phone, signup_time)
+        values (#{meetingId}, #{userId}, #{name}, #{phone}, sysdate())
+    </insert>
+
+    <select id="checkUserSignedUp" resultType="int">
+        select count(1) from academic_meeting_signup where meeting_id = #{meetingId} and user_id = #{userId}
+    </select>
+
+    <delete id="deleteSignupByMeetingAndUser">
+        delete from academic_meeting_signup where meeting_id = #{meetingId} and user_id = #{userId}
+    </delete>
+
+    <select id="selectNamesByMeetingId" resultType="String">
+        select name from academic_meeting_signup
+        where meeting_id = #{meetingId}
+    </select>
+
+</mapper>

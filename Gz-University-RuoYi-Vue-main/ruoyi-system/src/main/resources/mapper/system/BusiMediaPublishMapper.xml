@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusiMediaPublishMapper">
+    
+    <resultMap type="BusiMediaPublish" id="BusiMediaPublishResult">
+        <result property="id"    column="id"    />
+        <result property="publishType"    column="publish_type"    />
+        <result property="title"    column="title"    />
+        <result property="publishDate"    column="publish_date"    />
+        <result property="linkUrl"    column="link_url"    />
+        <result property="author"    column="author"    />
+        <result property="reviewerFirst"    column="reviewer_first"    />
+        <result property="reviewerSecond"    column="reviewer_second"    />
+        <result property="reviewerFinal"    column="reviewer_final"    />
+        <result property="videoEditor"    column="video_editor"    />
+        <result property="videoReviewer"    column="video_reviewer"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBusiMediaPublishVo">
+        select id, publish_type, title, publish_date, link_url, author, reviewer_first, reviewer_second, reviewer_final, video_editor, video_reviewer, create_by, create_time, update_by, update_time, remark from busi_media_publish
+    </sql>
+
+    <select id="selectBusiMediaPublishList" parameterType="BusiMediaPublish" resultMap="BusiMediaPublishResult">
+        <include refid="selectBusiMediaPublishVo"/>
+        <where>  
+            <if test="publishType != null  and publishType != ''"> and publish_type = #{publishType}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="publishDate != null "> and publish_date = #{publishDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiMediaPublishById" parameterType="Long" resultMap="BusiMediaPublishResult">
+        <include refid="selectBusiMediaPublishVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBusiMediaPublish" parameterType="BusiMediaPublish" useGeneratedKeys="true" keyProperty="id">
+        insert into busi_media_publish
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="publishType != null and publishType != ''">publish_type,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="publishDate != null">publish_date,</if>
+            <if test="linkUrl != null">link_url,</if>
+            <if test="author != null">author,</if>
+            <if test="reviewerFirst != null">reviewer_first,</if>
+            <if test="reviewerSecond != null">reviewer_second,</if>
+            <if test="reviewerFinal != null">reviewer_final,</if>
+            <if test="videoEditor != null">video_editor,</if>
+            <if test="videoReviewer != null">video_reviewer,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="publishType != null and publishType != ''">#{publishType},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="publishDate != null">#{publishDate},</if>
+            <if test="linkUrl != null">#{linkUrl},</if>
+            <if test="author != null">#{author},</if>
+            <if test="reviewerFirst != null">#{reviewerFirst},</if>
+            <if test="reviewerSecond != null">#{reviewerSecond},</if>
+            <if test="reviewerFinal != null">#{reviewerFinal},</if>
+            <if test="videoEditor != null">#{videoEditor},</if>
+            <if test="videoReviewer != null">#{videoReviewer},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiMediaPublish" parameterType="BusiMediaPublish">
+        update busi_media_publish
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="publishType != null and publishType != ''">publish_type = #{publishType},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="publishDate != null">publish_date = #{publishDate},</if>
+            <if test="linkUrl != null">link_url = #{linkUrl},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="reviewerFirst != null">reviewer_first = #{reviewerFirst},</if>
+            <if test="reviewerSecond != null">reviewer_second = #{reviewerSecond},</if>
+            <if test="reviewerFinal != null">reviewer_final = #{reviewerFinal},</if>
+            <if test="videoEditor != null">video_editor = #{videoEditor},</if>
+            <if test="videoReviewer != null">video_reviewer = #{videoReviewer},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBusiMediaPublishById" parameterType="Long">
+        delete from busi_media_publish where id = #{id}
+    </delete>
+
+    <delete id="deleteBusiMediaPublishByIds" parameterType="String">
+        delete from busi_media_publish where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

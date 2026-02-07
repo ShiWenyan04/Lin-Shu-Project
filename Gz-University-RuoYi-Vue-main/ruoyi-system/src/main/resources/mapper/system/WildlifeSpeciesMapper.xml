@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.WildlifeSpeciesMapper">
+
+    <resultMap type="WildlifeSpecies" id="WildlifeSpeciesResult">
+        <result property="id"    column="id"    />
+        <result property="sequenceNo"    column="sequence_no"    />
+        <result property="speciesName"    column="species_name"    />
+        <result property="objectCategory"    column="object_category"    />
+        <result property="location"    column="location"    />
+        <result property="photoTime"    column="photo_time"    />
+        <result property="photoPath"    column="photo_path"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectWildlifeSpeciesVo">
+        select id, sequence_no, species_name, object_category, location, photo_time, photo_path, remarks from wildlife_species
+    </sql>
+
+    <select id="countBySpeciesName" resultType="int">
+
+        SELECT COUNT(1)
+        FROM wildlife_species
+        WHERE species_name = #{speciesName, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectWildlifeSpeciesList" parameterType="WildlifeSpecies" resultMap="WildlifeSpeciesResult">
+        <include refid="selectWildlifeSpeciesVo"/>
+        <where>
+            <if test="speciesName != null  and speciesName != ''"> and species_name like concat('%', #{speciesName}, '%')</if>
+            <if test="objectCategory != null  and objectCategory != ''"> and object_category = #{objectCategory}</if>
+            <if test="location != null  and location != ''"> and location = #{location}</if>
+        </where>
+    </select>
+
+    <select id="selectWildlifeSpeciesById" parameterType="Long" resultMap="WildlifeSpeciesResult">
+        <include refid="selectWildlifeSpeciesVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertWildlifeSpecies" parameterType="WildlifeSpecies" useGeneratedKeys="true" keyProperty="id">
+        insert into wildlife_species
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no,</if>
+            <if test="speciesName != null and speciesName != ''">species_name,</if>
+            <if test="objectCategory != null and objectCategory != ''">object_category,</if>
+            <if test="location != null and location != ''">location,</if>
+            <if test="photoTime != null">photo_time,</if>
+            <if test="photoPath != null and photoPath != ''">photo_path,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequenceNo != null">#{sequenceNo},</if>
+            <if test="speciesName != null and speciesName != ''">#{speciesName},</if>
+            <if test="objectCategory != null and objectCategory != ''">#{objectCategory},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="photoTime != null">#{photoTime},</if>
+            <if test="photoPath != null and photoPath != ''">#{photoPath},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWildlifeSpecies" parameterType="WildlifeSpecies">
+        update wildlife_species
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sequenceNo != null">sequence_no = #{sequenceNo},</if>
+            <if test="speciesName != null and speciesName != ''">species_name = #{speciesName},</if>
+            <if test="objectCategory != null and objectCategory != ''">object_category = #{objectCategory},</if>
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="photoTime != null">photo_time = #{photoTime},</if>
+            <if test="photoPath != null and photoPath != ''">photo_path = #{photoPath},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWildlifeSpeciesById" parameterType="Long">
+        delete from wildlife_species where id = #{id}
+    </delete>
+
+    <delete id="deleteWildlifeSpeciesByIds" parameterType="String">
+        delete from wildlife_species where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

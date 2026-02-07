@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AcademicPaperMapper">
+    
+    <resultMap type="AcademicPaper" id="AcademicPaperResult">
+        <result property="id"    column="id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="degreeType"    column="degree_type"    />
+        <result property="supervisorName"    column="supervisor_name"    />
+        <result property="paperTitle"    column="paper_title"    />
+        <result property="topicConfirmationDate"    column="topic_confirmation_date"    />
+        <result property="plannedCompletionDate"    column="planned_completion_date"    />
+        <result property="firstDraftSubmitDate"    column="first_draft_submit_date"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="writingStatus"    column="writing_status"    />
+    </resultMap>
+
+    <sql id="selectAcademicPaperVo">
+        select id, student_name, degree_type, supervisor_name, paper_title, topic_confirmation_date, planned_completion_date, first_draft_submit_date, create_by, create_time, update_by, update_time, writing_status from academic_paper
+    </sql>
+
+    <select id="selectAcademicPaperList" parameterType="AcademicPaper" resultMap="AcademicPaperResult">
+        <include refid="selectAcademicPaperVo"/>
+        <where>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="degreeType != null  and degreeType != ''"> and degree_type = #{degreeType}</if>
+            <if test="supervisorName != null  and supervisorName != ''"> and supervisor_name like concat('%', #{supervisorName}, '%')</if>
+            <if test="paperTitle != null  and paperTitle != ''"> and paper_title like concat('%', #{paperTitle}, '%')</if>
+
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+
+        </where>
+    </select>
+    
+    <select id="selectAcademicPaperById" parameterType="Long" resultMap="AcademicPaperResult">
+        <include refid="selectAcademicPaperVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAcademicPaper" parameterType="AcademicPaper" useGeneratedKeys="true" keyProperty="id">
+        insert into academic_paper
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="degreeType != null and degreeType != ''">degree_type,</if>
+            <if test="supervisorName != null and supervisorName != ''">supervisor_name,</if>
+            <if test="paperTitle != null and paperTitle != ''">paper_title,</if>
+            <if test="topicConfirmationDate != null">topic_confirmation_date,</if>
+            <if test="plannedCompletionDate != null">planned_completion_date,</if>
+            <if test="firstDraftSubmitDate != null">first_draft_submit_date,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="writingStatus != null">writing_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="degreeType != null and degreeType != ''">#{degreeType},</if>
+            <if test="supervisorName != null and supervisorName != ''">#{supervisorName},</if>
+            <if test="paperTitle != null and paperTitle != ''">#{paperTitle},</if>
+            <if test="topicConfirmationDate != null">#{topicConfirmationDate},</if>
+            <if test="plannedCompletionDate != null">#{plannedCompletionDate},</if>
+            <if test="firstDraftSubmitDate != null">#{firstDraftSubmitDate},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="writingStatus != null">#{writingStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcademicPaper" parameterType="AcademicPaper">
+        update academic_paper
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="degreeType != null and degreeType != ''">degree_type = #{degreeType},</if>
+            <if test="supervisorName != null and supervisorName != ''">supervisor_name = #{supervisorName},</if>
+            <if test="paperTitle != null and paperTitle != ''">paper_title = #{paperTitle},</if>
+            <if test="topicConfirmationDate != null">topic_confirmation_date = #{topicConfirmationDate},</if>
+            <if test="plannedCompletionDate != null">planned_completion_date = #{plannedCompletionDate},</if>
+            <if test="firstDraftSubmitDate != null">first_draft_submit_date = #{firstDraftSubmitDate},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="writingStatus != null">writing_status = #{writingStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAcademicPaperById" parameterType="Long">
+        delete from academic_paper where id = #{id}
+    </delete>
+
+    <delete id="deleteAcademicPaperByIds" parameterType="String">
+        delete from academic_paper where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
